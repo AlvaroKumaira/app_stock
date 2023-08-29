@@ -53,7 +53,7 @@ def calculate_grades(data_frame):
 
     return data_frame
 
-def calculate_min_max_columns(data_frame):
+def calculate_min_max_columns(filial, data_frame):
     """
     Calculate the 'min' and 'max' columns for the given data frame based on predefined rules.
     
@@ -76,7 +76,10 @@ def calculate_min_max_columns(data_frame):
             daily_avg = 0
 
         computed_stock = daily_avg * 10
-        return math.ceil(max(computed_stock, row['seguranca']))
+        if filial == '0101':
+            return math.ceil(max(computed_stock, row['seguranca']))
+        else:
+            return math.ceil(computed_stock)
 
     data_frame['min'] = data_frame.apply(calculate_min_stock, axis=1)
 

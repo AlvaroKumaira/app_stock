@@ -165,7 +165,7 @@ def create_final_df(filial):
 
     # Merge the tables and calculate necessary columns
     intermediate_df = pd.merge(joined_table, params_df, on='B1_ZGRUPO', how='left')
-    intermediate_df = calculate_min_max_columns(intermediate_df)
+    intermediate_df = calculate_min_max_columns(filial, intermediate_df)
     final_df = calculate_stock_suggestion(intermediate_df)
 
     # Save the final result

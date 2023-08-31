@@ -69,9 +69,9 @@ def calculate_min_max_columns(filial, data_frame):
     # Define the internal function for 'min' column calculation
     def calculate_min_stock(row):
         if row['grade'] == 3:
-            daily_avg = row['avg_last_three_months'] / 30
-        elif row['grade'] == 2:
             daily_avg = row['avg_last_three_months'] / 20
+        elif row['grade'] == 2:
+            daily_avg = row['avg_last_three_months'] / 30
         else:
             daily_avg = 0
 

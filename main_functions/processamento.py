@@ -102,7 +102,7 @@ def calculate_min_max_columns(filial, data_frame):
     logger.info("Finished min-max column calculations.")
     return data_frame
 
-def calculate_stock_suggestion(data_frame):
+def calculate_stock_suggestion(filial, data_frame):
     """
     Calculate the 'stock_suggestion' column based on the given rules.
 
@@ -117,17 +117,18 @@ def calculate_stock_suggestion(data_frame):
 
     def suggestion(row):
         """Calculate the stock suggestion based on the rules provided."""
-        # Return 0 if N_Comprar value is 1
-        if row['N_Comprar'] == 1:
-            return 0
         
+        # For filial '0101', return 0 if N_Comprar value is 1
+        if filial == '0101' and row['N_Comprar'] == 1:
+            return 0
+
         # Calculate the sum of B2_QATU and QRE
         sum_val = row['B2_QATU'] + row['QRE']
-        
+
         # Return 0 if the sum exceeds or equals the min value
         if sum_val >= row['min']:
             return 0
-        
+
         # Calculate suggestion based on the difference between max value and the sum
         return row['max'] - sum_val
 

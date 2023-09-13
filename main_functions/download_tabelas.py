@@ -29,7 +29,7 @@ def download_saldo(filial):
     # Try to download the data, catch any exceptions
     try:
         # Use the download function to execute the SQL query and store the result in a DataFrame
-        params = (filial,)
+        params = (filial, filial)
         data_frame = download(saldo_analitico, params)
         logger.info(f"Downloaded {data_frame.shape[0]} rows of data for saldo_analitico.")
     except Exception as e:
@@ -42,7 +42,7 @@ def download_saldo(filial):
         "B1_TIPO": "TP",
         "B1_GRUPO": "GRUPO",
         "B1_DESC": "DESCRICAO",
-        "ENDERECO": "ENDEREÇO",
+        "BZ_LOCALI2": "ENDEREÇO",
         "B1_UM": "U.M.",
         "B2_FILIAL": "FL",
         "B2_LOCAL": "ARMZ",
@@ -136,7 +136,7 @@ def download_pedidos(filial, date):
         "C7_PRODUTO": "Produto",
         "C7_DESCRI": "Descricao",
         "B1_GRUPO": "Grupo",
-        "C7_EMISSAO": "Emissao",
+        "EMI": "Emissao",
         "A2_LOJA":"Lj",
         "ENT": "Entrega",
         "C7_QUANT": "Quantidade",
@@ -178,7 +178,7 @@ def download_pedidos(filial, date):
 
     book.save(excel_file_path)
 
-def download_faturamento(filial):
+def download_faturamento(filial, date):
     """
     Downloads and processes data for the faturamento query, and saves the result to an Excel file.
 
@@ -196,10 +196,13 @@ def download_faturamento(filial):
     # Log the start of the download process
     logger.info("Starting the download process for faturamento.")
 
+    # Convert the date to string for the Query
+    date_fat = date.strftime("%Y%m%d")
+
     # Try to download the data, catch any exceptions
     try:
         # Use the download function to execute the SQL query and store the result in a DataFrame
-        params = (filial,)
+        params = (date_fat, filial)
         data_frame = download(faturamento, params)
         logger.info(f"Downloaded {data_frame.shape[0]} rows of data for faturamento.")
     except Exception as e:
@@ -254,7 +257,7 @@ def download_faturamento(filial):
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
     
-def download_tabelas(filial, saldo, pedidos, faturamento, selected_date):
+def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date, faturamento_selected_date):
     """
     Downloads and processes data for specified queries and saves the results to Excel files.
 
@@ -280,11 +283,11 @@ def download_tabelas(filial, saldo, pedidos, faturamento, selected_date):
 
     # Download data for the pedidos query if requested
     if pedidos:
-        download_pedidos(filial, selected_date)
+        download_pedidos(filial, pedidos_selected_date)
 
     # Download data for the faturamento query if requested
     if faturamento:
-        download_faturamento(filial)
+        download_faturamento(filial, faturamento_selected_date)
 
     logger.info("Download process completed.")
     

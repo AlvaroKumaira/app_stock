@@ -23,24 +23,33 @@ class HubWindow(tk.Tk):
         Set the window properties and call the method to initialize UI components.
         """
         super().__init__()
-        self.geometry("450x450")
-        self.resizable(False, False)
+        self.geometry("500x350")
+        self.resizable(True, True)
         self.title("Gestão de Inventário")
-        self.init_ui()
+        self.current_frame = None
+        self.show_hub()
 
-    def init_ui(self):
+    def clear_frame(self):
+
+        if self.current_frame:
+            self.current_frame.destroy()
+        self.current_frame = tk.Frame(self)
+        self.current_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    def show_hub(self):
         """
         Initializes the UI components for the main hub window.
         Components:
         - Buttons to open various other windows and functionalities.
         """
+        self.clear_frame()
         
         # Create buttons with corresponding actions and place them in the window
-        tk.Button(self, text="Download Tabelas", command=self.open_download_window).grid(row=0, column=0, padx=10, pady=10)
-        tk.Button(self, text="Buscar Agrupamento", command=self.open_search_window).grid(row=1, column=0, padx=10, pady=10)
-        tk.Button(self, text="Sugestão de Compra", command=self.open_sugestao_window).grid(row=0, column=1, padx=10, pady=10)
-        tk.Button(self, text="Sugestão de Importação", command=self.open_import_window).grid(row=1, column=1, padx=10, pady=10)
-        tk.Button(self, text="Atualizar parâmetros", command=self.update_params).grid(row=6, column=4, padx=10, pady=10)
+        tk.Button(self.current_frame, text="Download Tabelas", command=self.show_download_tables_ui, relief="groove").grid(row=0, column=0, padx=10, pady=10, sticky='w')
+        tk.Button(self.current_frame, text="Buscar Agrupamento", command=self.show_search_ui, relief="groove").grid(row=1, column=0, padx=10, pady=10, sticky='w')
+        tk.Button(self.current_frame, text="Sugestão de Compra", command=self.show_sugestao_ui, relief="groove").grid(row=2, column=0, padx=10, pady=10, sticky='w')
+        tk.Button(self.current_frame, text="Sugestão de Importação", command=self.open_import_window, relief="groove").grid(row=3, column=0, padx=10, pady=10, sticky='w')
+        tk.Button(self.current_frame, text="Atualizar parâmetros", command=self.update_params, relief="groove").grid(row=4, column=0, padx=10, pady=10, sticky='w')
 
     def update_params(self):
         """
@@ -58,39 +67,50 @@ class HubWindow(tk.Tk):
             except Exception as e:
                 logger.error(f"Error exporting data from {file_path} to MySQL: {e}")
 
-    def open_download_window(self):
-        """Open the window dedicated to downloading tables."""
-        DownloadTablesUI()
+    def show_download_tables_ui(self):
+        """Display the download tables UI in the main frame"""
+        self.clear_frame()
 
-    def open_sugestao_window(self):
-        """Open the window dedicated to 'Sugestão de Compra' functionality."""
-        SugestaoUI()
+        # Initialize the DownloadTablesUI view in the current_frame
+        dtui = DownloadTablesUI(self.current_frame, self.show_hub)
+        dtui.pack(fill=tk.BOTH, expand=True)  # need to pack the frame to ensure it displays
 
-    def open_search_window(self):
-        """Open the window dedicated to searching for products."""
-        SearchUI()
+    def show_sugestao_ui(self):
+        """Display the Sugestao UI in the main frame"""
+        self.clear_frame()
+
+        # Initialize the DownloadTablesUI view in the current_frame
+        sutui = SugestaoUI(self.current_frame, self.show_hub)
+        sutui.pack(fill=tk.BOTH, expand=True)
+
+    def show_search_ui(self):
+        """Display the Search UI in the main frame"""
+        self.clear_frame()
+
+        # Initialize the DownloadTablesUI view in the current_frame
+        seui = SearchUI(self.current_frame, self.show_hub)
+        seui.pack(fill=tk.BOTH, expand=True)
 
     def open_import_window(self):
         """
-        Open the window dedicated to import suggestions.
+        Display the UI dedicated to import suggestions.
         Note: Implementation of this function is currently pending.
         """
         pass
 
-class DownloadTablesUI(tk.Toplevel):
+class DownloadTablesUI(tk.Frame):
     """
     A UI class for downloading tables based on user selections.
-    This class inherits from the tkinter Toplevel widget.
+    This class inherits from the tkinter Frame widget.
     """
 
-    def __init__(self):
+    def __init__(self, master, return_callback):
         """
         Initialize the DownloadTablesUI class.
         Set the window properties and call the method to initialize UI components.
         """
-        super().__init__()
-        self.geometry("600x250")
-        self.title("Download Tabelas")
+        super().__init__(master)
+        self.return_callback = return_callback
         self.init_ui()
 
     def init_ui(self):
@@ -110,11 +130,15 @@ class DownloadTablesUI(tk.Toplevel):
         filial_dropdown = tk.OptionMenu(self, self.selected_filial, *filial_options)
 
         # Date selection widget for the pedidos query
-        date_label = tk.Label(self, text="Data inicial para tabela de pedidos:")
-        self.date_entry = DateEntry(self, date_pattern='dd/mm/yyyy', locale='pt_BR.utf8', showcalendar=True)
+        date_label = tk.Label(self, text="Inicio - Pedidos:")
+        self.pedidos_date_entry = DateEntry(self, date_pattern='dd/mm/yyyy', locale='pt_BR.utf8', showcalendar=True)
+        # Date selection widget for the faturamento query
+        faturamento_date_label = tk.Label(self, text="Inicio - Faturamento:")
+        self.faturamento_date_entry = DateEntry(self, date_pattern='dd/mm/yyyy', locale='pt_BR.utf8', showcalendar=True)
 
         # Button to initiate the table download
         download_button = tk.Button(self, text="Download", command=self.start_download_data)
+        back_button = tk.Button(self, text="Voltar", command=self.return_callback)
 
         # Checkbuttons to allow user to select which tables to download
         self.saldo_var = tk.BooleanVar(value=True)
@@ -130,12 +154,15 @@ class DownloadTablesUI(tk.Toplevel):
         # Arrange the UI components using grid layout
         filial_dropdown.grid(row=0, column=0)
         date_label.grid(row=1, column=0)
-        self.date_entry.grid(row=2, column=0)
+        self.pedidos_date_entry.grid(row=2, column=0)
         saldo_check.grid(row=0, column=1, sticky='w')
         pedidos_check.grid(row=1, column=1, sticky='w')
         faturamento_check.grid(row=2, column=1, sticky='w')
         download_button.grid(row=0, column=2)
-        self.progress_bar.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
+        back_button.grid(row=6, column=6)
+        self.progress_bar.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
+        faturamento_date_label.grid(row=3, column=0)
+        self.faturamento_date_entry.grid(row=4, column=0)
 
     def start_download_data(self):
         """
@@ -148,7 +175,9 @@ class DownloadTablesUI(tk.Toplevel):
         pedidos = self.pedidos_var.get()
         faturamento = self.faturamento_var.get()
         filial = self.selected_filial.get()
-        selected_date = self.date_entry.get_date()
+        pedidos_selected_date = self.pedidos_date_entry.get_date()
+        faturamento_selected_date = self.faturamento_date_entry.get_date()
+
 
         # Start the progress bar animation
         self.progress_bar.start()
@@ -156,8 +185,8 @@ class DownloadTablesUI(tk.Toplevel):
         # Inner function to download data and stop the progress bar once completed
         def download_and_update_progress():
             try:
-                download_tabelas(filial, saldo, pedidos, faturamento, selected_date)
-                logger.info(f"Downloaded data for filial {filial} up to date {selected_date}.")
+                download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date, faturamento_selected_date)
+                logger.info(f"Downloaded data for filial {filial} up to date.")
             except Exception as e:
                 logger.error(f"Error during data download for filial {filial}: {e}")
             finally:
@@ -167,20 +196,19 @@ class DownloadTablesUI(tk.Toplevel):
         download_thread = threading.Thread(target=download_and_update_progress)
         download_thread.start()
 
-class SugestaoUI(tk.Toplevel):
+class SugestaoUI(tk.Frame):
     """
     A UI class for handling Sugestão de Compra operations.
     This class inherits from the tkinter Toplevel widget.
     """
     
-    def __init__(self):
+    def __init__(self, master, return_callback):
         """
         Initialize the SugestaoUI class.
         Set the window properties and call the method to initialize UI components.
         """
-        super().__init__()
-        self.geometry("500x100")
-        self.title("Sugestão de Compra")
+        super().__init__(master)
+        self.return_callback = return_callback
         self.init_ui()
 
     def init_ui(self):
@@ -190,6 +218,7 @@ class SugestaoUI(tk.Toplevel):
         - Dropdown for selecting filial
         - Button to initiate the download
         - Progress bar to show the operation's progress
+        - A Back button to return to the main hub
         """
         
         # Dropdown for selecting filial
@@ -199,13 +228,15 @@ class SugestaoUI(tk.Toplevel):
         
         # Button to initiate the download
         download_button = tk.Button(self, text="Download", command=self.download_thread)
+        back_button = tk.Button(self, text="Voltar", command=self.return_callback)
 
         # Progress bar to show the user that the script is running
         self.progress_bar = ttk.Progressbar(self, mode='indeterminate', length=200)
         
         # Layout all widgets using a grid
-        filial_dropdown.grid(row=0, column=0, padx=0, pady=0)
-        download_button.grid(row=0, column=2, rowspan=1, padx=0, pady=0)
+        filial_dropdown.grid(row=0, column=0)
+        download_button.grid(row=0, column=2, rowspan=1)
+        back_button.grid(row=0, column=3)
         self.progress_bar.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
 
     def download_suges(self):
@@ -242,21 +273,19 @@ class SugestaoUI(tk.Toplevel):
         download_thread = threading.Thread(target=self.download_suges)
         download_thread.start()  # Start the thread
 
-class SearchUI(tk.Toplevel):
+class SearchUI(tk.Frame):
     """
     A UI class for item searching functionality.
     This class inherits from the tkinter Toplevel widget.
     """
     
-    def __init__(self):
+    def __init__(self, master, return_callback):
         """
         Initialize the SearchUI class.
         Set the window properties and call the method to initialize UI components.
         """
-        super().__init__()
-        self.geometry("450x600")
-        self.resizable(False, False)
-        self.title("Busca de itens")
+        super().__init__(master)
+        self.return_callback = return_callback
         self.init_ui()
 
     def init_ui(self):
@@ -275,6 +304,7 @@ class SearchUI(tk.Toplevel):
         
         # Button to initiate the search
         start_button = tk.Button(self, text="Buscar", command=self.start_search)
+        back_button = tk.Button(self, text="Voltar", command=self.return_callback)
 
         # Display area for the results
         self.results_frame = tk.Frame(self)
@@ -287,6 +317,7 @@ class SearchUI(tk.Toplevel):
 
         # Layout all widgets using a grid
         product_id_label.grid(row=0, column=0, padx=10, pady=10)
+        back_button.grid(row=0, column=9, padx=10, pady=10)
         self.product_id_entry.grid(row=1, column=0, padx=10, pady=10)
         start_button.grid(row=2, column=0, padx=10, pady=10)
         self.results_frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10)

@@ -20,6 +20,7 @@ config.read_string(config_content)
 # Get a logger
 logger = logging.getLogger(__name__)
 
+
 class Database:
     def __init__(self, db_config, db_type='sql_server'):
         """
@@ -56,7 +57,7 @@ class Database:
         - Connection object: If successful.
         - None: Otherwise.
         """
-         
+
         if self.db_type == 'sql_server':
             return self.connect_sql_server()
         elif self.db_type == 'mysql':
@@ -73,7 +74,7 @@ class Database:
 
         try:
             connection_string = (f"mssql+pyodbc://{self.sql_username}:{self.sql_password}@"
-                                f"{self.sql_server}/{self.sql_database}?driver=ODBC+Driver+17+for+SQL+Server")
+                                 f"{self.sql_server}/{self.sql_database}?driver=ODBC+Driver+17+for+SQL+Server")
             self.connection = create_engine(connection_string)
             return self.connection
         except Exception as e:
@@ -97,4 +98,3 @@ class Database:
         except Exception as e:
             logger.error(f"An error occurred while connecting to the MySQL database: {e}")
             return None
-

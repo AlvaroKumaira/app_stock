@@ -6,6 +6,7 @@ import logging
 # Get a logger
 logger = logging.getLogger(__name__)
 
+
 def calculate_grades(data_frame):
     """
     Calculate grades for sales data based on defined rules.
@@ -39,7 +40,7 @@ def calculate_grades(data_frame):
     rolled_sum = date_df.T.rolling(window=2).sum().T
     no_consecutive_zeros = (rolled_sum != 0).all(axis=1)
     rule_3_condition = three_of_five_months_check & no_consecutive_zeros
-    
+
     # Create conditions list for grade assignment.
     conditions = [
         rule_1_condition,
@@ -52,6 +53,7 @@ def calculate_grades(data_frame):
     data_frame['grade'] = np.select(conditions, grades, default=0)
 
     return data_frame
+
 
 def calculate_min_max_columns(filial, data_frame):
     """
@@ -95,12 +97,13 @@ def calculate_min_max_columns(filial, data_frame):
             return 0
 
     data_frame['max'] = data_frame.apply(
-        lambda row: row['min'] if calculate_max_stock(row) <= row['min'] else calculate_max_stock(row), 
+        lambda row: row['min'] if calculate_max_stock(row) <= row['min'] else calculate_max_stock(row),
         axis=1
     )
 
     logger.info("Finished min-max column calculations.")
     return data_frame
+
 
 def calculate_stock_suggestion(filial, data_frame):
     """
@@ -117,7 +120,7 @@ def calculate_stock_suggestion(filial, data_frame):
 
     def suggestion(row):
         """Calculate the stock suggestion based on the rules provided."""
-        
+
         # For filial '0101', return 0 if N_Comprar value is 1
         if filial == '0101' and row['N_Comprar'] == 1:
             return 0

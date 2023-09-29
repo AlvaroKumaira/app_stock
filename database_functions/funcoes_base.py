@@ -9,6 +9,7 @@ from main_functions.atualizar_params import merge_sheets
 # Get a logger
 logger = logging.getLogger(__name__)
 
+
 def download(query, params):
     """
     Downloads data from the database using a specified SQL query.
@@ -23,7 +24,7 @@ def download(query, params):
     # Create an instance of the Database class and establish a connection.
     db_instance = Database(db_config=config, db_type='sql_server')
     db = db_instance.connect()
-    
+
     try:
         # Execute the SQL query and store the result in a DataFrame.
         data_frame = pd.read_sql(query, db, params=params)
@@ -33,6 +34,7 @@ def download(query, params):
         data_frame = None
 
     return data_frame
+
 
 def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=logger):
     """
@@ -73,6 +75,7 @@ def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=l
 
     return excel_file_path
 
+
 def export_to_mysql(excel_path, tablename):
     """
     Extracts data from an Excel file and exports it to a specified MySQL table.
@@ -102,6 +105,7 @@ def export_to_mysql(excel_path, tablename):
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
+
 def get_params_from_mysql(tablename):
     """
     Fetch specified columns from a MySQL table.
@@ -120,7 +124,3 @@ def get_params_from_mysql(tablename):
     except Exception as e:
         logger.error(f"An error occurred while fetching data from MySQL table '{tablename}': {e}")
         return pd.DataFrame()
-
-
-
-

@@ -1,5 +1,6 @@
 import logging
-from user_interface.ui_classes import HubWindow
+from user_interface.main_ui import MainWindowLogic
+from PyQt5.QtWidgets import QApplication
 
 # Set up logging configurations.
 logging.basicConfig(
@@ -13,16 +14,20 @@ logging.basicConfig(
 def main():
     """
     Entry point for the application.
-    
-    This function initializes the HubWindow and starts the Tkinter event loop.
+
+    This function initializes the MainWindow and starts the PyQt event loop.
     Any unexpected errors during this process are logged and then raised.
     """
     try:
-        # Create a HUB window instance.
-        hub_window = HubWindow()
-        
-        # Start the Tkinter event loop.
-        hub_window.mainloop()
+        # Create a PyQt application instance.
+        app = QApplication([])
+
+        # Create a MainWindowExtended_Download_Tables instance and show it.
+        window = MainWindowLogic()
+        window.show()
+
+        # Start the PyQt event loop.
+        app.exec_()
     except Exception as e:
         logging.error(f"An unexpected error occurred while creating the session: {e}")
         raise

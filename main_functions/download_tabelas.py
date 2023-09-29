@@ -8,6 +8,7 @@ from database_functions.queries import pedidos, faturamento, saldo_analitico
 # Get a logger
 logger = logging.getLogger(__name__)
 
+
 def download_saldo(filial):
     """
     Downloads and processes data for the saldo_analitico query, and saves the result to an Excel file.
@@ -35,7 +36,7 @@ def download_saldo(filial):
     except Exception as e:
         logger.error(f"An error occurred during download: {str(e)}")
         return
-    
+
     # Rename columns
     column_mapping = {
         "B1_COD": "CODIGO",
@@ -89,10 +90,11 @@ def download_saldo(filial):
     }
     for col, number_format in column_format.items():
         col_index = data_frame.columns.get_loc(col) + 1  # get column index in Excel (1-indexed)
-        for row in range(2, len(data_frame)+2):  # Apply formatting row by row (2+ because of 1-indexing and header)
+        for row in range(2, len(data_frame) + 2):  # Apply formatting row by row (2+ because of 1-indexing and header)
             sheet.cell(row=row, column=col_index).number_format = number_format
 
     book.save(excel_file_path)
+
 
 def download_pedidos(filial, date):
     """
@@ -108,7 +110,7 @@ def download_pedidos(filial, date):
     Returns:
     None: The result is saved to an Excel file, and the file is opened for viewing.
     """
-    
+
     # Log the start of the download process
     logger.info("Starting the download process for pedidos.")
 
@@ -137,18 +139,18 @@ def download_pedidos(filial, date):
         "C7_DESCRI": "Descricao",
         "B1_GRUPO": "Grupo",
         "EMI": "Emissao",
-        "A2_LOJA":"Lj",
+        "A2_LOJA": "Lj",
         "ENT": "Entrega",
         "C7_QUANT": "Quantidade",
         "C7_UM": "UM",
         "C7_PRECO": "Prc Unitario",
         "DE": "Vl.Desconto",
         "C7_VALIP": "Vlr.IPI",
-        "C7_TOTAL":"Vlr.Total",
-        "C7_QUJE":"Qtd.Entregue",
-        "QRE":"Quant.Receber",
-        "SRE":"Saldo Receber",
-        "C7_RESIDUO":"Res.Elim."
+        "C7_TOTAL": "Vlr.Total",
+        "C7_QUJE": "Qtd.Entregue",
+        "QRE": "Quant.Receber",
+        "SRE": "Saldo Receber",
+        "C7_RESIDUO": "Res.Elim."
     }
     data_frame.rename(columns=column_mapping, inplace=True)
 
@@ -177,6 +179,7 @@ def download_pedidos(filial, date):
             sheet.cell(row=row, column=col_index).number_format = number_format
 
     book.save(excel_file_path)
+
 
 def download_faturamento(filial, date):
     """
@@ -208,7 +211,7 @@ def download_faturamento(filial, date):
     except Exception as e:
         logger.error(f"An error occurred during download: {str(e)}")
         return
-    
+
     # Rename columns
     column_mapping = {
         "D2_TP": "TP",
@@ -227,8 +230,8 @@ def download_faturamento(filial, date):
         "TEMP1": "Mix *Mar",
         "TEMP2": "",
         "TEMP3": "Mix",
-        "TEMP4":"Custo de Reposicao",
-        "TEMP5":"Variacao"
+        "TEMP4": "Custo de Reposicao",
+        "TEMP5": "Variacao"
     }
     data_frame.rename(columns=column_mapping, inplace=True)
 
@@ -256,7 +259,8 @@ def download_faturamento(filial, date):
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
-    
+
+
 def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date, faturamento_selected_date):
     """
     Downloads and processes data for specified queries and saves the results to Excel files.
@@ -290,6 +294,7 @@ def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date,
         download_faturamento(filial, faturamento_selected_date)
 
     logger.info("Download process completed.")
-    
+
+
 if __name__ == "__main__":
-    download_tabelas() 
+    download_tabelas()

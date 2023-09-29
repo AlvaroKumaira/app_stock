@@ -1,0 +1,162 @@
+
+2023-09-28 11:20:19,361 - INFO - Creating final data frame for branch 0101.
+2023-09-28 11:20:19,361 - INFO - Fetching general information for branch 0101.
+2023-09-28 11:20:20,740 - INFO - download was successful
+2023-09-28 11:20:20,758 - INFO - Processed general information for branch 0101.
+2023-09-28 11:20:20,758 - INFO - Fetching order information for branch 0101.
+2023-09-28 11:20:21,274 - INFO - download was successful
+2023-09-28 11:20:21,277 - INFO - Processed order information for branch 0101.
+2023-09-28 11:20:21,277 - INFO - Fetching fat_history for branch 0101.
+2023-09-28 11:20:22,936 - INFO - download was successful
+2023-09-28 11:20:23,015 - INFO - Processed fat_history for branch 0101.
+2023-09-28 11:20:23,191 - INFO - Starting min-max column calculations.
+2023-09-28 11:20:23,276 - INFO - Finished min-max column calculations.
+2023-09-28 11:20:23,276 - INFO - Calculating stock suggestions.
+2023-09-28 11:20:23,317 - INFO - Stock suggestions calculated.
+2023-09-28 11:20:23,320 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928112023.xlsx.
+2023-09-28 11:20:23,345 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928112023.xlsx successfully.
+2023-09-28 11:20:23,357 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-28 11:20:23,359 - INFO - Successfully executed create_final_df
+2023-09-28 11:21:00,019 - INFO - Starting the search process.
+2023-09-28 11:21:00,507 - INFO - download was successful
+2023-09-28 11:21:00,998 - INFO - download was successful
+2023-09-28 11:21:00,998 - INFO - Search complete with 1 results.
+2023-09-28 11:21:00,999 - INFO - Successfully executed search_function
+2023-09-28 11:21:16,007 - INFO - Starting the search process.
+2023-09-28 11:21:16,372 - INFO - download was successful
+2023-09-28 11:21:16,882 - INFO - download was successful
+2023-09-28 11:21:16,882 - INFO - Search complete with 1 results.
+2023-09-28 11:21:16,883 - INFO - Successfully executed search_function
+2023-09-28 11:26:09,023 - INFO - Creating final data frame for branch 0101.
+2023-09-28 11:26:09,023 - INFO - Fetching general information for branch 0101.
+2023-09-28 11:26:09,705 - INFO - download was successful
+2023-09-28 11:26:09,722 - INFO - Processed general information for branch 0101.
+2023-09-28 11:26:09,722 - INFO - Fetching order information for branch 0101.
+2023-09-28 11:26:10,260 - INFO - download was successful
+2023-09-28 11:26:10,265 - INFO - Processed order information for branch 0101.
+2023-09-28 11:26:10,266 - INFO - Fetching fat_history for branch 0101.
+2023-09-28 11:26:11,917 - INFO - download was successful
+2023-09-28 11:26:12,221 - INFO - Processed fat_history for branch 0101.
+2023-09-28 11:26:12,436 - INFO - Starting min-max column calculations.
+2023-09-28 11:26:12,510 - INFO - Finished min-max column calculations.
+2023-09-28 11:26:12,510 - INFO - Calculating stock suggestions.
+2023-09-28 11:26:12,550 - INFO - Stock suggestions calculated.
+2023-09-28 11:26:12,553 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928112612.xlsx.
+2023-09-28 11:26:12,571 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928112612.xlsx successfully.
+2023-09-28 11:26:12,581 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-28 11:26:12,582 - INFO - Successfully executed create_final_df
+2023-09-28 14:04:42,826 - INFO - Creating final data frame for branch 0101.
+2023-09-28 14:04:42,826 - INFO - Fetching general information for branch 0101.
+2023-09-28 14:04:44,174 - INFO - download was successful
+2023-09-28 14:04:44,190 - INFO - Processed general information for branch 0101.
+2023-09-28 14:04:44,190 - INFO - Fetching order information for branch 0101.
+2023-09-28 14:04:44,799 - INFO - download was successful
+2023-09-28 14:04:44,805 - INFO - Processed order information for branch 0101.
+2023-09-28 14:04:44,805 - INFO - Fetching fat_history for branch 0101.
+2023-09-28 14:04:46,509 - INFO - download was successful
+2023-09-28 14:04:46,582 - INFO - Processed fat_history for branch 0101.
+2023-09-28 14:04:46,775 - INFO - Starting min-max column calculations.
+2023-09-28 14:04:46,855 - INFO - Finished min-max column calculations.
+2023-09-28 14:04:46,855 - INFO - Calculating stock suggestions.
+2023-09-28 14:04:46,901 - INFO - Stock suggestions calculated.
+2023-09-28 14:04:46,903 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928140446.xlsx.
+2023-09-28 14:04:46,930 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928140446.xlsx successfully.
+2023-09-28 14:04:46,944 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-28 14:04:46,945 - INFO - Successfully executed create_final_df
+2023-09-28 14:05:34,651 - INFO - Starting the search process.
+2023-09-28 14:05:35,083 - INFO - download was successful
+2023-09-28 14:05:35,705 - INFO - download was successful
+2023-09-28 14:05:35,705 - INFO - Search complete with 4 results.
+2023-09-28 14:05:35,706 - INFO - Successfully executed search_function
+2023-09-28 16:13:50,648 - INFO - Creating final data frame for branch 0101.
+2023-09-28 16:13:50,648 - INFO - Fetching general information for branch 0101.
+2023-09-28 16:13:51,413 - INFO - download was successful
+2023-09-28 16:13:51,438 - INFO - Processed general information for branch 0101.
+2023-09-28 16:13:51,438 - INFO - Fetching order information for branch 0101.
+2023-09-28 16:13:51,923 - INFO - download was successful
+2023-09-28 16:13:51,929 - INFO - Processed order information for branch 0101.
+2023-09-28 16:13:51,929 - INFO - Fetching fat_history for branch 0101.
+2023-09-28 16:13:52,899 - INFO - download was successful
+2023-09-28 16:13:53,005 - INFO - Processed fat_history for branch 0101.
+2023-09-28 16:13:53,234 - INFO - Starting min-max column calculations.
+2023-09-28 16:13:53,346 - INFO - Finished min-max column calculations.
+2023-09-28 16:13:53,346 - INFO - Calculating stock suggestions.
+2023-09-28 16:13:53,394 - INFO - Stock suggestions calculated.
+2023-09-28 16:13:53,396 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928161353.xlsx.
+2023-09-28 16:13:53,421 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230928161353.xlsx successfully.
+2023-09-28 16:13:53,437 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-28 16:13:53,439 - INFO - Successfully executed create_final_df
+2023-09-28 16:15:06,719 - INFO - Starting the search process.
+2023-09-28 16:15:07,094 - INFO - download was successful
+2023-09-28 16:15:07,532 - INFO - download was successful
+2023-09-28 16:15:07,532 - INFO - Search complete with 2 results.
+2023-09-28 16:15:07,532 - INFO - Successfully executed search_function
+2023-09-28 16:16:00,763 - INFO - Starting the download process for filial: 0101
+2023-09-28 16:16:00,763 - INFO - Starting the download process for saldo_analitico.
+2023-09-28 16:16:01,618 - INFO - download was successful
+2023-09-28 16:16:01,618 - INFO - Downloaded 10121 rows of data for saldo_analitico.
+2023-09-28 16:16:01,716 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\saldo_analítico_0101_20230928161601.xlsx.
+2023-09-28 16:16:04,044 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\saldo_analítico_0101_20230928161601.xlsx successfully.
+2023-09-28 16:16:07,632 - INFO - Download process completed.
+2023-09-28 16:16:07,632 - INFO - Successfully executed download_tabelas
+2023-09-29 07:37:51,623 - INFO - Creating final data frame for branch 0101.
+2023-09-29 07:37:51,624 - INFO - Fetching general information for branch 0101.
+2023-09-29 07:37:52,596 - INFO - download was successful
+2023-09-29 07:37:52,624 - INFO - Processed general information for branch 0101.
+2023-09-29 07:37:52,624 - INFO - Fetching order information for branch 0101.
+2023-09-29 07:37:53,130 - INFO - download was successful
+2023-09-29 07:37:53,136 - INFO - Processed order information for branch 0101.
+2023-09-29 07:37:53,136 - INFO - Fetching fat_history for branch 0101.
+2023-09-29 07:37:54,430 - INFO - download was successful
+2023-09-29 07:37:54,529 - INFO - Processed fat_history for branch 0101.
+2023-09-29 07:37:55,426 - INFO - Starting min-max column calculations.
+2023-09-29 07:37:55,504 - INFO - Finished min-max column calculations.
+2023-09-29 07:37:55,504 - INFO - Calculating stock suggestions.
+2023-09-29 07:37:55,544 - INFO - Stock suggestions calculated.
+2023-09-29 07:37:55,546 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230929073755.xlsx.
+2023-09-29 07:37:55,571 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230929073755.xlsx successfully.
+2023-09-29 07:37:55,586 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-29 07:37:55,586 - INFO - Successfully executed create_final_df
+2023-09-29 09:01:08,012 - INFO - Creating final data frame for branch 0101.
+2023-09-29 09:01:08,012 - INFO - Fetching general information for branch 0101.
+2023-09-29 09:01:09,358 - INFO - download was successful
+2023-09-29 09:01:09,375 - INFO - Processed general information for branch 0101.
+2023-09-29 09:01:09,376 - INFO - Fetching order information for branch 0101.
+2023-09-29 09:01:10,048 - INFO - download was successful
+2023-09-29 09:01:10,055 - INFO - Processed order information for branch 0101.
+2023-09-29 09:01:10,055 - INFO - Fetching fat_history for branch 0101.
+2023-09-29 09:01:11,171 - INFO - download was successful
+2023-09-29 09:01:11,247 - INFO - Processed fat_history for branch 0101.
+2023-09-29 09:01:11,491 - INFO - Starting min-max column calculations.
+2023-09-29 09:01:11,565 - INFO - Finished min-max column calculations.
+2023-09-29 09:01:11,565 - INFO - Calculating stock suggestions.
+2023-09-29 09:01:11,603 - INFO - Stock suggestions calculated.
+2023-09-29 09:01:11,605 - ERROR - Error during execution of create_final_df: 'Sugestão de Compra'
+2023-09-29 09:02:56,422 - INFO - Creating final data frame for branch 0101.
+2023-09-29 09:02:56,422 - INFO - Fetching general information for branch 0101.
+2023-09-29 09:02:57,536 - INFO - download was successful
+2023-09-29 09:02:57,552 - INFO - Processed general information for branch 0101.
+2023-09-29 09:02:57,552 - INFO - Fetching order information for branch 0101.
+2023-09-29 09:02:58,111 - INFO - download was successful
+2023-09-29 09:02:58,117 - INFO - Processed order information for branch 0101.
+2023-09-29 09:02:58,117 - INFO - Fetching fat_history for branch 0101.
+2023-09-29 09:02:59,314 - INFO - download was successful
+2023-09-29 09:02:59,395 - INFO - Processed fat_history for branch 0101.
+2023-09-29 09:02:59,593 - INFO - Starting min-max column calculations.
+2023-09-29 09:02:59,667 - INFO - Finished min-max column calculations.
+2023-09-29 09:02:59,667 - INFO - Calculating stock suggestions.
+2023-09-29 09:02:59,703 - INFO - Stock suggestions calculated.
+2023-09-29 09:02:59,706 - INFO - Writing data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230929090259.xlsx.
+2023-09-29 09:03:00,827 - INFO - Saved data to C:\Users\alvaro.fonseca\Desktop\Resultado\sugestão_compra__0101_20230929090259.xlsx successfully.
+2023-09-29 09:03:01,668 - INFO - Final data frame for branch 0101 saved to Excel.
+2023-09-29 09:03:01,669 - INFO - Successfully executed create_final_df
+2023-09-29 09:09:35,031 - INFO - Starting the search process.
+2023-09-29 09:09:35,977 - INFO - download was successful
+2023-09-29 09:09:36,493 - INFO - download was successful
+2023-09-29 09:09:36,493 - INFO - Search complete with 1 results.
+2023-09-29 09:09:36,494 - INFO - Successfully executed search_function
+2023-09-29 09:09:49,237 - INFO - Starting the search process.
+2023-09-29 09:09:49,649 - INFO - download was successful
+2023-09-29 09:09:50,104 - INFO - download was successful
+2023-09-29 09:09:50,105 - INFO - Search complete with 1 results.
+2023-09-29 09:09:50,105 - INFO - Successfully executed search_function

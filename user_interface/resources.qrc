@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../dependencies/business-report.png</file>
+        <file>../dependencies/home.png</file>
+        <file>../dependencies/import.png</file>
+        <file>../dependencies/logo.png</file>
+        <file>../dependencies/magnifying-glass.png</file>
+        <file>../dependencies/purchase.png</file>
+        <file>../dependencies/settings.png</file>
+        <file>../dependencies/loading.gif</file>
+    </qresource>
+</RCC>

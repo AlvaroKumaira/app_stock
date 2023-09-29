@@ -1,0 +1,12 @@
+# Log files
+app.txt
+
+# Configuration files
+db_config.ini
+build.bat
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/

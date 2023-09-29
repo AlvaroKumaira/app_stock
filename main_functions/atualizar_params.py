@@ -4,19 +4,21 @@ import logging
 # Get a logger
 logger = logging.getLogger(__name__)
 
+
 def round_and_stringify(value):
     try:
         # Replace the comma with a dot to treat the value as a float
         float_value = float(str(value).replace(',', '.'))
-        
+
         # Round the float to the nearest integer
         rounded_value = round(float_value)
-        
+
         # Convert the rounded integer back to a string
         return str(rounded_value)
     except:
         # If there's any error in the process, just return the original value as a string
         return str(value)
+
 
 def merge_sheets(excel_path):
     # Read sheets
@@ -50,12 +52,12 @@ def merge_sheets(excel_path):
     # If TempN_Comprar is NaN, it means B1_ZGRUPO is not from df3
     merged_df['n_comprar'] = merged_df['TempN_Comprar'].fillna(0).astype(int)
     merged_df['mult'] = merged_df['mult'].fillna(1).astype(int)
-    
+
     # Drop the temporary column
     merged_df.drop('TempN_Comprar', axis=1, inplace=True)
 
     # Fill NaN values with appropriate defaults
-    merged_df.fillna({ "mult": 1, "seguranca": 0, "n_comprar": 0}, inplace=True)
+    merged_df.fillna({"mult": 1, "seguranca": 0, "n_comprar": 0}, inplace=True)
 
     # Group by 'B1_ZGRUPO' and 'Descrição' and get indices of rows with the highest 'seguranca' value
     idx = merged_df.groupby('B1_ZGRUPO')['seguranca'].idxmax()

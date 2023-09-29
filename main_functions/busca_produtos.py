@@ -2,6 +2,7 @@ import logging
 from database_functions.funcoes_base import download
 from database_functions.queries import query_busca, query_resultado
 
+
 def search_function(user_search):
     """
     Execute a search based on the user's input.
@@ -44,4 +45,3 @@ def search_function(user_search):
     else:
         logger.error("An error occurred during the search.")
         return
-

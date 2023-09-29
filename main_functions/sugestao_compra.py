@@ -9,8 +9,7 @@ from database_functions.queries import info_gerais, historico_faturamento, quant
 logger = logging.getLogger(__name__)
 
 
-
-def download_method( query, params):
+def download_method(query, params):
     """
     Download data using a given SQL query and parameters.
     This function additionally filters out rows where 'B1_ZGRUPO' is missing or an empty string.
@@ -27,6 +26,7 @@ def download_method( query, params):
     data_frame = data_frame[data_frame['B1_ZGRUPO'].str.strip() != '']
     return data_frame
 
+
 def general_information(filial):
     """
     Fetch and process the general information data frame for a specific branch (filial).
@@ -38,7 +38,7 @@ def general_information(filial):
     - DataFrame: Processed general information.
     """
     logger.info(f"Fetching general information for branch {filial}.")
-    
+
     query = info_gerais
     params = (filial, filial,)
     gi_data_frame = download_method(query, params)
@@ -57,6 +57,7 @@ def general_information(filial):
     logger.info(f"Processed general information for branch {filial}.")
     return gi_data_frame
 
+
 def orders(filial):
     """
     Fetch and process the order information data frame for a specific branch (filial).
@@ -68,7 +69,7 @@ def orders(filial):
     - DataFrame: Processed order information.
     """
     logger.info(f"Fetching order information for branch {filial}.")
-    
+
     query = quantidade_receber
     params = (filial,)
     o_data_frame = download_method(query, params)
@@ -82,7 +83,8 @@ def orders(filial):
 
     logger.info(f"Processed order information for branch {filial}.")
     return o_data_frame
-    
+
+
 def fat_history(filial):
     """
     Fetch and process the fat_history information for a specific branch (filial).
@@ -94,7 +96,7 @@ def fat_history(filial):
     - DataFrame: Processed fat_history information.
     """
     logger.info(f"Fetching fat_history for branch {filial}.")
-    
+
     query = historico_faturamento
     params = (filial,)
     fh_data_frame = download_method(query, params)
@@ -107,7 +109,8 @@ def fat_history(filial):
 
     # Aggregate data and process further
     result = fh_data_frame.groupby(['B1_ZGRUPO', 'Month_Year'], as_index=False)[column_to_sum].sum()
-    pivot_result = result.pivot_table(index='B1_ZGRUPO', columns='Month_Year', values=column_to_sum, fill_value=0, aggfunc='sum')
+    pivot_result = result.pivot_table(index='B1_ZGRUPO', columns='Month_Year', values=column_to_sum, fill_value=0,
+                                      aggfunc='sum')
     pivot_result['total_sum'] = pivot_result.sum(axis=1)
     pivot_result['avg_last_two_months'] = np.ceil(pivot_result.iloc[:, -3:-1].mean(axis=1)).astype(int)
     pivot_result['avg_last_three_months'] = np.ceil(pivot_result.iloc[:, -5:-2].mean(axis=1)).astype(int)
@@ -116,6 +119,7 @@ def fat_history(filial):
 
     logger.info(f"Processed fat_history for branch {filial}.")
     return fh_data_frame
+
 
 def join_parts(*data_frames):
     """
@@ -130,12 +134,13 @@ def join_parts(*data_frames):
     """
     if not data_frames:
         raise ValueError("At least one dataframe must be provided.")
-    
+
     joined_df = data_frames[0]
     for df in data_frames[1:]:
         joined_df = pd.merge(joined_df, df, on='B1_ZGRUPO', how='left')
     joined_df.fillna(0, inplace=True)
     return joined_df
+
 
 def create_final_df(filial):
     """
@@ -145,16 +150,16 @@ def create_final_df(filial):
     - filial (str): The specific branch.
 
     Returns:
-    - None: The function saves the output to an Excel file.
+    - pd.DataFrame: The final data frame.
     """
-    
+
     logger.info(f"Creating final data frame for branch {filial}.")
 
     # Retrieve necessary data
     general_info = general_information(filial)
     order_info = orders(filial)
     fat_info = fat_history(filial)
-    
+
     # Join the tables
     joined_table = join_parts(general_info, order_info, fat_info)
 
@@ -172,7 +177,26 @@ def create_final_df(filial):
     intermediate_df = calculate_min_max_columns(filial, intermediate_df)
     final_df = calculate_stock_suggestion(filial, intermediate_df)
 
+    # Filter columns
+    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'B2_QATU', 'QRE', 'grade', 'seguranca', 'stock_suggestion']
+    display_df = final_df[columns_to_keep]
+
+    # Rename columns
+    column_mapping = {
+        'B1_ZGRUPO': 'Agrupamento',
+        'B1_DESC': 'Descrição',
+        'B1_COD': 'Código',
+        'B2_QATU': 'Quantidade Disponível',
+        'QRE': 'Quantidade em Pedido',
+        'grade': 'Nota',
+        'seguranca': 'Segurança',
+        'stock_suggestion': 'Sugestão de Compra'
+    }
+    display_df = display_df.rename(columns=column_mapping)
+    display_df = display_df[display_df['Sugestão de Compra'] > 0]
+
     # Save the final result
     save_to_excel(final_df, "sugestão_compra_", filial, open_file=True)
     logger.info(f"Final data frame for branch {filial} saved to Excel.")
 
+    return display_df

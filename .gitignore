@@ -10,3 +10,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.egg-info/
+
+# PyCharm specific
+.idea/

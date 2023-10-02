@@ -13,3 +13,6 @@ __pycache__/
 
 # PyCharm specific
 .idea/
+
+
+.dependencies/

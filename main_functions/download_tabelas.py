@@ -261,6 +261,7 @@ def download_faturamento(filial, date):
         return
 
 
+# noinspection PyShadowingNames
 def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date, faturamento_selected_date):
     """
     Downloads and processes data for specified queries and saves the results to Excel files.
@@ -281,20 +282,25 @@ def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date,
     # Log the start of the download process for the specific queries
     logger.info(f"Starting the download process for filial: {filial}")
 
-    # Download data for the saldo_analitico query if requested
-    if saldo:
-        download_saldo(filial)
+    # Define a list of all branches.
+    all_filials = ['0101', '0103', '0104', "0105"]
 
-    # Download data for the pedidos query if requested
-    if pedidos:
-        download_pedidos(filial, pedidos_selected_date)
+    # If filial is "Todas", loop through all branches
+    filials_to_process = all_filials if filial == 'Todas' else [filial]
 
-    # Download data for the faturamento query if requested
-    if faturamento:
-        download_faturamento(filial, faturamento_selected_date)
+    for current_filial in filials_to_process:
+        logger.info(f"Starting the download process for filial: {current_filial}")
+
+        # Download data for the saldo_analitico query if requested
+        if saldo:
+            download_saldo(current_filial)
+
+        # Download data for the pedidos query if requested
+        if pedidos:
+            download_pedidos(current_filial, pedidos_selected_date)
+
+        # Download data for the faturamento query if requested
+        if faturamento:
+            download_faturamento(current_filial, faturamento_selected_date)
 
     logger.info("Download process completed.")
-
-
-if __name__ == "__main__":
-    download_tabelas()

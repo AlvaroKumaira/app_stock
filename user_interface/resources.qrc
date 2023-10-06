@@ -7,6 +7,6 @@
         <file>../dependencies/magnifying-glass.png</file>
         <file>../dependencies/purchase.png</file>
         <file>../dependencies/settings.png</file>
-        <file>../dependencies/loading.gif</file>
+        <file>../dependencies/background.png</file>
     </qresource>
 </RCC>

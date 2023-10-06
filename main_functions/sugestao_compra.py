@@ -178,7 +178,7 @@ def create_final_df(filial):
     final_df = calculate_stock_suggestion(filial, intermediate_df)
 
     # Filter columns
-    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'B2_QATU', 'QRE', 'grade', 'seguranca', 'stock_suggestion']
+    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'B2_QATU', 'QRE', 'grade', 'Segurança', 'stock_suggestion']
     display_df = final_df[columns_to_keep]
 
     # Rename columns
@@ -186,10 +186,8 @@ def create_final_df(filial):
         'B1_ZGRUPO': 'Agrupamento',
         'B1_DESC': 'Descrição',
         'B1_COD': 'Código',
-        'B2_QATU': 'Quantidade Disponível',
-        'QRE': 'Quantidade em Pedido',
         'grade': 'Nota',
-        'seguranca': 'Segurança',
+        'Segurança': 'Segurança',
         'stock_suggestion': 'Sugestão de Compra'
     }
     display_df = display_df.rename(columns=column_mapping)

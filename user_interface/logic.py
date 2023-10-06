@@ -20,16 +20,14 @@ class BaseLogic:
         self.download_thread.deleteLater()
 
     def start_progress(self):
-        self.ui.progressBar.setMinimum(0)
-        self.ui.progressBar.setMaximum(0)
-        self.ui.progress_sug.setMinimum(0)
-        self.ui.progress_sug.setMaximum(0)
+        self.ui.progressBar.show()
+        self.ui.progress_sug.show()
+        self.ui.progressBar_search.show()
 
     def stop_progress(self):
-        self.ui.progressBar.setMinimum(0)
-        self.ui.progressBar.setMaximum(100)
-        self.ui.progress_sug.setMinimum(0)
-        self.ui.progress_sug.setMaximum(100)
+        self.ui.progressBar.hide()
+        self.ui.progress_sug.hide()
+        self.ui.progressBar_search.hide()
 
 
 class Download_Tables_Logic(BaseLogic):
@@ -88,7 +86,6 @@ class SugestaoLogic(BaseLogic):
         for row in range(df.shape[0]):
             for col in range(df.shape[1]):
                 item = QTableWidgetItem(str(df.iat[row, col]))
-                item.setForeground(white_color)  # Set the font color to white
                 self.ui.tableWidget.setItem(row, col, item)
 
 
@@ -104,6 +101,8 @@ class BuscaLogic(BaseLogic):
     def start_search(self):
         product_id = self.ui.lineEdit.text()
         self.download_thread = DownloadThread(search_function, product_id)
+        self.download_thread.progress_started.connect(self.start_progress)
+        self.download_thread.progress_stopped.connect(self.stop_progress)
 
         # Connect both update_labels and display_dataframe to the finished_with_result signal
         self.download_thread.finished_with_result.connect(self.update_labels)
@@ -112,6 +111,11 @@ class BuscaLogic(BaseLogic):
         self.download_thread.start()
 
     def update_labels(self, df):
+        if df is None or df.empty:
+            self.ui.agrup.setText(f"Agrupamento: Não encontrado!")
+            self.ui.desc.setText(f"Descrição: Não encontrado!")
+            return
+
         group_value = df.iloc[0]['B1_ZGRUPO']
         desc_value = df.iloc[0]['B1_DESC']
         self.ui.agrup.setText(f"Agrupamento: {group_value}")
@@ -122,6 +126,11 @@ class BuscaLogic(BaseLogic):
         """
         Display the dataframe in the QTableWidget.
         """
+        if df is None or df.empty:
+            self.ui.search_result.clearContents()
+            self.ui.search_result.setRowCount(0)
+            return
+
         column_names = {"B1_COD": "Código", "B2_QATU": "Quantidade"}
         df.rename(columns=column_names, inplace=True)
 
@@ -135,5 +144,4 @@ class BuscaLogic(BaseLogic):
         for row in range(df.shape[0]):
             for col in range(df.shape[1]):
                 item = QTableWidgetItem(str(df.iat[row, col]))
-                item.setForeground(white_color)  # Set the font color to white
                 self.ui.search_result.setItem(row, col, item)

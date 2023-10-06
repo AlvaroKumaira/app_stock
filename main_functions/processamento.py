@@ -79,7 +79,7 @@ def calculate_min_max_columns(filial, data_frame):
 
         computed_stock = daily_avg * 10
         if filial == '0101':
-            return math.ceil(max(computed_stock, row['seguranca']))
+            return math.ceil(max(computed_stock, row['Segurança']))
         else:
             return math.ceil(computed_stock)
 

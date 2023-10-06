@@ -91,9 +91,6 @@ def export_to_mysql(excel_path, tablename):
     db_instance = Database(db_config=config, db_type="mysql")
     engine = db_instance.connect()
 
-    # Placeholder for the merged DataFrame.
-    merged_df = None
-
     try:
         # Merge data from all sheets in the Excel file into a single DataFrame.
         merged_df = merge_sheets(excel_path)
@@ -119,7 +116,7 @@ def get_params_from_mysql(tablename):
     db_instance = Database(db_config=config, db_type="mysql")
     engine = db_instance.connect()
     try:
-        params_df = pd.read_sql(f"SELECT B1_ZGRUPO, seguranca, mult, N_Comprar FROM {tablename}", engine)
+        params_df = pd.read_sql(f"SELECT B1_ZGRUPO, Segurança, Mult, N_Comprar FROM {tablename}", engine)
         return params_df
     except Exception as e:
         logger.error(f"An error occurred while fetching data from MySQL table '{tablename}': {e}")

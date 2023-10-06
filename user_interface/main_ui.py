@@ -1,8 +1,9 @@
 import logging
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QWidget
+from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QWidget, QFileDialog
 from PyQt5.QtCore import QPropertyAnimation
 from .design import Ui_MainWindow
 from .logic import Download_Tables_Logic, SugestaoLogic, BuscaLogic
+from database_functions.funcoes_base import export_to_mysql
 
 logger = logging.getLogger(__name__)
 
@@ -21,19 +22,42 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
         #  Adjust the geometry based on the screen size
         screen = QDesktopWidget().screenGeometry()
         width, height = screen.width(), screen.height()
-        self.setGeometry(0, 0, int(width * 0.9), int(height * 0.9))
+        self.setGeometry(0, 0, int(width * 0.4), int(height * 0.4))
 
         self.home_button.clicked.connect(lambda: self.switch_view(0))
         self.relatorios_button.clicked.connect(lambda: self.switch_view(1))
         self.sug_comp_button.clicked.connect((lambda: self.switch_view(2)))
         self.sug_import_button.clicked.connect((lambda: self.switch_view(3)))
         self.search_button.clicked.connect((lambda: self.switch_view(4)))
+        self.update_button.clicked.connect(self.update_params)
 
-        # set progress bar min and max to keep it stopped by default
+        # set progress bar to make them indeterminate
         self.progressBar.setMinimum(0)
-        self.progressBar.setMaximum(100)
+        self.progressBar.setMaximum(0)
         self.progress_sug.setMinimum(0)
-        self.progress_sug.setMaximum(100)
+        self.progress_sug.setMaximum(0)
+
+        self.progressBar.hide()
+        self.progress_sug.hide()
+        self.progressBar_search.hide()
 
     def switch_view(self, index):
         self.view.setCurrentIndex(index)
+        self.adjustSize()
+
+    def update_params(self):
+        """
+        Prompt the user to select an Excel file and then export its content
+        to the MySQL 'params' table.
+        """
+        options = QFileDialog.Options()
+        file_path, _ = QFileDialog.getOpenFileName(self, "Abrir excel de parâmetros", "",
+                                                   "Excel Files (*.xls;*.xlsx);;All Files (*)", options=options)
+
+        if file_path:  # Check if a file was selected
+            tablename = "params"
+            try:
+                export_to_mysql(file_path, tablename)
+                logger.info(f"Exported data from {file_path} to MySQL table {tablename}")
+            except Exception as e:
+                logger.error(f"Error exporting data from {file_path} to MySQL: {e}")

@@ -20,22 +20,50 @@ def round_and_stringify(value):
         return str(value)
 
 
+def simplify_columns(df):
+    """Simplify the column headers by using only the top level if the second level is unnamed."""
+    new_columns = []
+    for col in df.columns:
+        if "Unnamed" in col[1]:
+            new_columns.append(col[0])
+        else:
+            new_columns.append((col[0], col[1]))
+    df.columns = new_columns
+    return df
+
+
 def merge_sheets(excel_path):
     # Read sheets
-    df2 = pd.read_excel(excel_path, sheet_name="T_MULT")
-    df3 = pd.read_excel(excel_path, sheet_name="P_N")
-    df1 = pd.read_excel(excel_path, sheet_name="P_ESP")
+    df2 = pd.read_excel(excel_path, sheet_name="T_MULT", header=[0, 1])
+    df3 = pd.read_excel(excel_path, sheet_name="P_N", header=[0, 1])
+    df1 = pd.read_excel(excel_path, sheet_name="P_ESP", header=[0, 1])
 
-    df1 = df1.drop(columns='Descrição')
-    df2 = df2.drop(columns='Descrição')
-    df3 = df3.drop(columns='Descrição')
+    # Drop the columns with parent header "Parâmetro Atual" if it exists
+    if 'Parâmetro Atual' in df1.columns.get_level_values(0):
+        df1 = df1.drop(columns='Parâmetro Atual', level=0)
+    if 'Parâmetro Atual' in df2.columns.get_level_values(0):
+        df2 = df2.drop(columns='Parâmetro Atual', level=0)
+    if 'Parâmetro Atual' in df3.columns.get_level_values(0):
+        df3 = df3.drop(columns='Parâmetro Atual', level=0)
+
+    df1 = simplify_columns(df1)
+    df2 = simplify_columns(df2)
+    df3 = simplify_columns(df3)
+
+    df1_columns_to_drop = ['Descrição', 'Código', 'N°', 'Est.', 'Observação']
+    df2_columns_to_drop = ['N°', 'Código', 'Descrição', 'Est.']
+    df3_columns_to_drop = ['N°', 'Código', 'Descrição', 'Est.', 'Observação']
+
+    df1 = df1.drop(columns=df1_columns_to_drop)
+    df2 = df2.drop(columns=df2_columns_to_drop)
+    df3 = df3.drop(columns=df3_columns_to_drop)
 
     # Rename columns for clarity
     df1.rename(columns={"cod_agrup": "B1_ZGRUPO"}, inplace=True)
     df2.rename(columns={"cod_agrup": "B1_ZGRUPO"}, inplace=True)
     df3.rename(columns={"cod_agrup": "B1_ZGRUPO"}, inplace=True)
-    df2.rename(columns={"Mult.": "mult"}, inplace=True)
-    df1.rename(columns={"Qt.": "seguranca"}, inplace=True)
+    df2.rename(columns={"Mult.": "Mult"}, inplace=True)
+    df1.rename(columns={"Qt.": "Segurança"}, inplace=True)
 
     df1['B1_ZGRUPO'] = df1['B1_ZGRUPO'].apply(round_and_stringify)
     df2['B1_ZGRUPO'] = df2['B1_ZGRUPO'].apply(round_and_stringify)
@@ -50,17 +78,17 @@ def merge_sheets(excel_path):
     merged_df.dropna(subset=['B1_ZGRUPO'], inplace=True)
 
     # If TempN_Comprar is NaN, it means B1_ZGRUPO is not from df3
-    merged_df['n_comprar'] = merged_df['TempN_Comprar'].fillna(0).astype(int)
-    merged_df['mult'] = merged_df['mult'].fillna(1).astype(int)
+    merged_df['N_comprar'] = merged_df['TempN_Comprar'].fillna(0).astype(int)
+    merged_df['Mult'] = merged_df['Mult'].fillna(1).astype(int)
 
     # Drop the temporary column
     merged_df.drop('TempN_Comprar', axis=1, inplace=True)
 
     # Fill NaN values with appropriate defaults
-    merged_df.fillna({"mult": 1, "seguranca": 0, "n_comprar": 0}, inplace=True)
+    merged_df.fillna({"Mult": 1, "Segurança": 0, "N_comprar": 0}, inplace=True)
 
-    # Group by 'B1_ZGRUPO' and 'Descrição' and get indices of rows with the highest 'seguranca' value
-    idx = merged_df.groupby('B1_ZGRUPO')['seguranca'].idxmax()
+    # Group by 'B1_ZGRUPO' and get indices of rows with the highest 'seguranca' value
+    idx = merged_df.groupby('B1_ZGRUPO')['Segurança'].idxmax()
 
     # Filter dataframe using these indices
     merged_df = merged_df.loc[idx]

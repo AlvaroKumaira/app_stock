@@ -142,7 +142,7 @@ def join_parts(*data_frames):
     return joined_df
 
 
-def create_final_df(filial):
+def create_final_df(filial, func):
     """
     Create the final data frame by merging and computing different columns.
 
@@ -193,8 +193,12 @@ def create_final_df(filial):
     display_df = display_df.rename(columns=column_mapping)
     display_df = display_df[display_df['Sugestão de Compra'] > 0]
 
-    # Save the final result
-    save_to_excel(final_df, "sugestão_compra_", filial, open_file=True)
-    logger.info(f"Final data frame for branch {filial} saved to Excel.")
+    if func:
+        # Save the final result
+        save_to_excel(final_df, "sugestão_compra_", filial, open_file=True)
+        logger.info(f"Final data frame for branch {filial} saved to Excel.")
 
-    return display_df
+        return display_df
+
+    else:
+        return final_df

@@ -7,6 +7,7 @@ from main_functions.download_tabelas import download_tabelas
 from .download_thread import DownloadThread
 from main_functions.sugestao_compra import create_final_df
 from main_functions.busca_produtos import search_function
+from main_functions.analise_inventario import create_report
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +24,13 @@ class BaseLogic:
         self.ui.progressBar.show()
         self.ui.progress_sug.show()
         self.ui.progressBar_search.show()
+        self.ui.table_progressbar.show()
 
     def stop_progress(self):
         self.ui.progressBar.hide()
         self.ui.progress_sug.hide()
         self.ui.progressBar_search.hide()
+        self.ui.table_progressbar.hide()
 
 
 class Download_Tables_Logic(BaseLogic):
@@ -66,7 +69,7 @@ class SugestaoLogic(BaseLogic):
     def start_download_sug(self):
         filial = self.ui.filial_select.currentText()
 
-        self.download_thread = DownloadThread(create_final_df, filial)
+        self.download_thread = DownloadThread(create_final_df, filial, True)
         self.download_thread.progress_started.connect(self.start_progress)
         self.download_thread.progress_stopped.connect(self.stop_progress)
         self.download_thread.finished_with_result.connect(self.display_sugestao_dataframe)
@@ -145,3 +148,22 @@ class BuscaLogic(BaseLogic):
             for col in range(df.shape[1]):
                 item = QTableWidgetItem(str(df.iat[row, col]))
                 self.ui.search_result.setItem(row, col, item)
+
+
+class Analysis_Report_Logic(BaseLogic):
+    def __init__(self, ui):
+        super().__init__(ui)
+        self.setup_connections()
+
+    def setup_connections(self):
+        self.ui.start_table_button.clicked.connect(self.start_table)
+
+    def start_table(self):
+        filial = self.ui.table_filial_select.currentText()
+        periodo = self.ui.table_periodo_select.currentText()
+
+        self.download_thread = DownloadThread(create_report, filial, periodo)
+        self.download_thread.progress_started.connect(self.start_progress)
+        self.download_thread.progress_stopped.connect(self.stop_progress)
+        self.download_thread.finished.connect(self.on_thread_finished)
+        self.download_thread.start()

@@ -186,6 +186,38 @@ background-color: white;</string>
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="table_button">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/dependencies/spreadsheet.png</normaloff>:/dependencies/spreadsheet.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="sug_comp_button">
             <property name="minimumSize">
              <size>
@@ -361,7 +393,7 @@ background-color: white;</string>
           <enum>QFrame::Plain</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="home">
           <property name="styleSheet">
@@ -1049,6 +1081,298 @@ QProgressBar::chunk {
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="table_view">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(238, 238, 238);</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QFrame" name="frame">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QLabel" name="relat_title_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="text">
+                 <string>Análise de Estoque</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>429</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="table_base_frame">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(238, 238, 238);</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <widget class="QProgressBar" name="table_progressbar">
+              <property name="geometry">
+               <rect>
+                <x>360</x>
+                <y>20</y>
+                <width>100</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QProgressBar {
+    border: 1px black;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);  /* Set to your preferred background color */
+    text-align: center;  /* Optional: if you want text centered */
+}
+
+QProgressBar::chunk {
+    background-color: rgb(70, 113, 230);  /* Set to your preferred chunk color */
+    width: 5px;  /* Width of the moving chunk */
+    margin: 0px;  /* Space between individual chunks */
+}</string>
+              </property>
+              <property name="maximum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>-1</number>
+              </property>
+              <property name="textVisible">
+               <bool>false</bool>
+              </property>
+              <property name="invertedAppearance">
+               <bool>false</bool>
+              </property>
+              <property name="format">
+               <string>%p%</string>
+              </property>
+             </widget>
+             <widget class="QComboBox" name="table_filial_select">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>22</y>
+                <width>54</width>
+                <height>18</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="currentText">
+               <string>0101</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>0101</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0103</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0104</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0105</string>
+               </property>
+              </item>
+             </widget>
+             <widget class="QLabel" name="table_filial_lable">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>24</width>
+                <height>23</height>
+               </rect>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Filial:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::AutoText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="start_table_button">
+              <property name="geometry">
+               <rect>
+                <x>210</x>
+                <y>20</y>
+                <width>75</width>
+                <height>23</height>
+               </rect>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+	background-color: rgb(70, 113, 230);
+    color: rgb(255, 255, 255);
+    border: none;
+}
+QPushButton:pressed {
+    background-color: rgb(100, 100, 100);
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Iniciar</string>
+              </property>
+              <property name="default">
+               <bool>true</bool>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QComboBox" name="table_periodo_select">
+              <property name="geometry">
+               <rect>
+                <x>50</x>
+                <y>60</y>
+                <width>71</width>
+                <height>18</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="currentText">
+               <string>6 meses</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>6 meses</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3 meses</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>12 meses</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>24 meses</string>
+               </property>
+              </item>
+             </widget>
+             <widget class="QLabel" name="table_periodo_lable">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>41</width>
+                <height>23</height>
+               </rect>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Período:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::AutoText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="sug_comp">
           <property name="styleSheet">
            <string notr="true">background-color: rgb(238, 238, 238);</string>
@@ -1189,6 +1513,12 @@ QProgressBar::chunk {
                  </item>
                  <item>
                   <widget class="QPushButton" name="download_sug">
+                   <property name="minimumSize">
+                    <size>
+                     <width>75</width>
+                     <height>25</height>
+                    </size>
+                   </property>
                    <property name="focusPolicy">
                     <enum>Qt::WheelFocus</enum>
                    </property>
@@ -1196,8 +1526,15 @@ QProgressBar::chunk {
                     <bool>false</bool>
                    </property>
                    <property name="styleSheet">
-                    <string notr="true">color: rgb(238, 238, 238);
-border-color: rgb(238, 238, 238);</string>
+                    <string notr="true">QPushButton {
+	background-color: rgb(70, 113, 230);
+    color: rgb(255, 255, 255);
+    border: none;
+}
+QPushButton:pressed {
+    background-color: rgb(100, 100, 100);
+}
+</string>
                    </property>
                    <property name="text">
                     <string>Download</string>

@@ -8,5 +8,6 @@
         <file>../dependencies/purchase.png</file>
         <file>../dependencies/settings.png</file>
         <file>../dependencies/background.png</file>
+        <file>../dependencies/spreadsheet.png</file>
     </qresource>
 </RCC>

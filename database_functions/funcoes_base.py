@@ -10,13 +10,13 @@ from main_functions.atualizar_params import merge_sheets
 logger = logging.getLogger(__name__)
 
 
-def download(query, params):
+def download(query, params=None):
     """
     Downloads data from the database using a specified SQL query.
-    
+
     Parameters:
     - query (str): SQL query to execute.
-    - params (dict): Parameter for the SQL query.
+    - params (dict, optional): Parameter for the SQL query.
 
     Returns:
     - DataFrame: DataFrame containing the results or None if an error occurred.
@@ -27,7 +27,10 @@ def download(query, params):
 
     try:
         # Execute the SQL query and store the result in a DataFrame.
-        data_frame = pd.read_sql(query, db, params=params)
+        if params:
+            data_frame = pd.read_sql(query, db, params=params)
+        else:
+            data_frame = pd.read_sql(query, db)
         logger.info("download was successful")
     except Exception as e:
         logger.error(f"An error occurred: {e}")

@@ -174,3 +174,22 @@ WHERE
     S.B2_FILIAL IS NOT NULL AND
     S.B2_LOCAL IS NOT NULL
     """
+
+
+def report_query(days, filial):
+    return f"""
+        SELECT
+            SB.B1_ZGRUPO,
+            SD2.D2_COD,
+            SB.B1_DESC,
+            SD2.D2_QUANT,
+            SD2.D2_EMISSAO
+            FROM SD2010 AS SD2
+            INNER JOIN
+            SB1010 AS SB ON SD2.D2_COD = SB.B1_COD AND SB.D_E_L_E_T_ <> '*' 
+            WHERE SD2.D_E_L_E_T_  <> '*'
+            AND SD2.D2_LOCAL = 'A01'
+            AND SD2.D2_FILIAL = '{filial}'
+            AND CONVERT(DATETIME, STUFF(STUFF(CAST(SD2.D2_EMISSAO AS VARCHAR), 7, 0, '-'), 5, 0, '-')) >= DATEADD(DAY, -{days}, GETDATE())
+            ORDER BY SD2.D2_EMISSAO
+        """

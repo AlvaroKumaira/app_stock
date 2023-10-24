@@ -10,7 +10,6 @@ app_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 # Construct the path to the .ini file
 config_path = os.path.join(app_path, 'db_config.ini')
 
-config_content = ''
 with open(config_path, 'r', encoding='utf-8') as f:
     config_content = f.read()
 

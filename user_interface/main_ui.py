@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QWidget, QFileDialog
 from PyQt5.QtCore import QPropertyAnimation
 from .design import Ui_MainWindow
 from .logic import Download_Tables_Logic, SugestaoLogic, BuscaLogic, Analysis_Report_Logic
-from database_functions.funcoes_base import export_to_mysql
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,6 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
         self.sug_comp_button.clicked.connect((lambda: self.switch_view(3)))
         self.sug_import_button.clicked.connect((lambda: self.switch_view(4)))
         self.search_button.clicked.connect((lambda: self.switch_view(5)))
-        self.update_button.clicked.connect(self.update_params)
 
         # set progress bar to make them indeterminate
         self.progressBar.setMinimum(0)
@@ -47,20 +45,3 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
     def switch_view(self, index):
         self.view.setCurrentIndex(index)
         self.adjustSize()
-
-    def update_params(self):
-        """
-        Prompt the user to select an Excel file and then export its content
-        to the MySQL 'params' table.
-        """
-        options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getOpenFileName(self, "Abrir excel de parâmetros", "",
-                                                   "Excel Files (*.xls;*.xlsx);;All Files (*)", options=options)
-
-        if file_path:  # Check if a file was selected
-            tablename = "params"
-            try:
-                export_to_mysql(file_path, tablename)
-                logger.info(f"Exported data from {file_path} to MySQL table {tablename}")
-            except Exception as e:
-                logger.error(f"Error exporting data from {file_path} to MySQL: {e}")

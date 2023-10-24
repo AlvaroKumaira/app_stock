@@ -4,7 +4,7 @@ import os
 import datetime
 from database_functions.db_connect import Database, config
 from openpyxl import load_workbook
-from main_functions.atualizar_params import merge_sheets
+from main_functions.fetch_params import merge_sheets
 
 # Get a logger
 logger = logging.getLogger(__name__)
@@ -77,50 +77,3 @@ def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=l
         return excel_file_path, book, sheet
 
     return excel_file_path
-
-
-def export_to_mysql(excel_path, tablename):
-    """
-    Extracts data from an Excel file and exports it to a specified MySQL table.
-    
-    Parameters:
-    - excel_path (str): Path to the Excel file to extract data from.
-    - tablename (str): Name of the MySQL table where the data should be saved.
-
-    Note:
-    Any existing data in the MySQL table will be replaced with the new data.
-    """
-    # Create an instance of the Database class and establish a connection.
-    db_instance = Database(db_config=config, db_type="mysql")
-    engine = db_instance.connect()
-
-    try:
-        # Merge data from all sheets in the Excel file into a single DataFrame.
-        merged_df = merge_sheets(excel_path)
-        logger.info("Data extraction and merging were successful")
-
-        # Save the merged DataFrame to the MySQL table.
-        merged_df.to_sql(tablename, engine, if_exists='replace', index=False)
-        logger.info(f"Data saved successfully to {tablename} in the MySQL database")
-    except Exception as e:
-        logger.error(f"An error occurred: {e}")
-
-
-def get_params_from_mysql(tablename):
-    """
-    Fetch specified columns from a MySQL table.
-    
-    Parameters:
-    - tablename (str): The name of the table in the MySQL database.
-
-    Returns:
-    - DataFrame: Data fetched from the specified MySQL table.
-    """
-    db_instance = Database(db_config=config, db_type="mysql")
-    engine = db_instance.connect()
-    try:
-        params_df = pd.read_sql(f"SELECT B1_ZGRUPO, Segurança, Mult, N_Comprar FROM {tablename}", engine)
-        return params_df
-    except Exception as e:
-        logger.error(f"An error occurred while fetching data from MySQL table '{tablename}': {e}")
-        return pd.DataFrame()

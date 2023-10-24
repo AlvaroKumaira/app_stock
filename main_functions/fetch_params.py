@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import logging
 
 # Get a logger
@@ -32,7 +33,10 @@ def simplify_columns(df):
     return df
 
 
-def merge_sheets(excel_path):
+def merge_sheets(local_folder="params", file_name="Dados_Sug.xlsx"):
+
+    excel_path = os.path.join(local_folder, file_name)
+
     # Read sheets
     df2 = pd.read_excel(excel_path, sheet_name="T_MULT", header=[0, 1])
     df3 = pd.read_excel(excel_path, sheet_name="P_N", header=[0, 1])

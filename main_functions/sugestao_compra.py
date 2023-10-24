@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import logging
-from database_functions.funcoes_base import download, save_to_excel, get_params_from_mysql
+from database_functions.funcoes_base import download, save_to_excel
+from main_functions.fetch_params import merge_sheets
 from main_functions.processamento import calculate_grades, calculate_min_max_columns, calculate_stock_suggestion
 from database_functions.queries import info_gerais, historico_faturamento, quantidade_receber
 
@@ -165,7 +166,7 @@ def create_final_df(filial, func):
 
     if filial == "0101":
         # Fetch params from MySQL and prepare for merging
-        params_df = get_params_from_mysql('params')
+        params_df = merge_sheets()
         joined_table['B1_ZGRUPO'] = joined_table['B1_ZGRUPO'].astype(str)
         params_df['B1_ZGRUPO'] = params_df['B1_ZGRUPO'].astype(str)
 

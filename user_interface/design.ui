@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
+    <width>730</width>
     <height>627</height>
    </rect>
   </property>
@@ -393,14 +393,11 @@ background-color: white;</string>
           <enum>QFrame::Plain</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="home">
           <property name="styleSheet">
-           <string notr="true">background-color: transparent;
-alternate-background-image: transparent;
-border: none;
-background-image: url(:/dependencies/background.png);</string>
+           <string notr="true">background-color: rgb(35, 56, 115);</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
@@ -409,7 +406,7 @@ background-image: url(:/dependencies/background.png);</string>
               <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
+              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -438,11 +435,7 @@ background-image: url(:/dependencies/background.png);</string>
               <bool>false</bool>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLabe#titleLabel {
-	color: rgb(23, 23, 23);
-    background-color: transparent;
-    border: none;
-}
+              <string notr="true">color: rgb(255, 255, 255);
 
 
 </string>
@@ -1160,8 +1153,8 @@ QProgressBar::chunk {
              <widget class="QProgressBar" name="table_progressbar">
               <property name="geometry">
                <rect>
-                <x>360</x>
-                <y>20</y>
+                <x>110</x>
+                <y>250</y>
                 <width>100</width>
                 <height>21</height>
                </rect>
@@ -1211,75 +1204,19 @@ QProgressBar::chunk {
                <string>%p%</string>
               </property>
              </widget>
-             <widget class="QComboBox" name="table_filial_select">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>22</y>
-                <width>54</width>
-                <height>18</height>
-               </rect>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="currentText">
-               <string>0101</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>0101</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>0103</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>0104</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>0105</string>
-               </property>
-              </item>
-             </widget>
-             <widget class="QLabel" name="table_filial_lable">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>24</width>
-                <height>23</height>
-               </rect>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Filial:</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::AutoText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-              </property>
-             </widget>
              <widget class="QPushButton" name="start_table_button">
               <property name="geometry">
                <rect>
-                <x>210</x>
-                <y>20</y>
+                <x>0</x>
+                <y>250</y>
                 <width>75</width>
                 <height>23</height>
                </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
               </property>
               <property name="focusPolicy">
                <enum>Qt::WheelFocus</enum>
@@ -1308,66 +1245,251 @@ QPushButton:pressed {
                <bool>true</bool>
               </property>
              </widget>
-             <widget class="QComboBox" name="table_periodo_select">
+             <widget class="QFrame" name="frame_11">
               <property name="geometry">
                <rect>
-                <x>50</x>
-                <y>60</y>
-                <width>71</width>
-                <height>18</height>
+                <x>0</x>
+                <y>10</y>
+                <width>300</width>
+                <height>100</height>
                </rect>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>300</width>
+                <height>100</height>
+               </size>
+              </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">background-color: rgb(119, 119, 119);</string>
               </property>
-              <property name="currentText">
-               <string>6 meses</string>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>6 meses</string>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <property name="spacing">
+                <number>3</number>
                </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>3 meses</string>
+               <property name="leftMargin">
+                <number>0</number>
                </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>12 meses</string>
+               <property name="topMargin">
+                <number>0</number>
                </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24 meses</string>
+               <property name="rightMargin">
+                <number>0</number>
                </property>
-              </item>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="text">
+                  <string>Filial:</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::AutoText</enum>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="table_filial_select">
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="currentText">
+                  <string>0101</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>0101</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>0103</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>0104</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>0105</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </widget>
-             <widget class="QLabel" name="table_periodo_lable">
+             <widget class="QFrame" name="frame_12">
               <property name="geometry">
                <rect>
-                <x>10</x>
-                <y>60</y>
-                <width>41</width>
-                <height>23</height>
+                <x>0</x>
+                <y>120</y>
+                <width>300</width>
+                <height>100</height>
                </rect>
               </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+              <property name="minimumSize">
+               <size>
+                <width>300</width>
+                <height>100</height>
+               </size>
               </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">background-color: rgb(119, 119, 119);</string>
               </property>
-              <property name="text">
-               <string>Período:</string>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
               </property>
-              <property name="textFormat">
-               <enum>Qt::AutoText</enum>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <property name="spacing">
+                <number>3</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="table_periodo_lable">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="text">
+                  <string>Período:</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::AutoText</enum>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="table_periodo_select">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="currentText">
+                  <string>6 meses</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>6 meses</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3 meses</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>12 meses</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>24 meses</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </widget>
             </widget>
            </item>
@@ -1464,6 +1586,11 @@ QPushButton:pressed {
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
                   <widget class="QLabel" name="filial_sug">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="layoutDirection">
                     <enum>Qt::LeftToRight</enum>
                    </property>
@@ -1483,6 +1610,11 @@ QPushButton:pressed {
                  </item>
                  <item>
                   <widget class="QComboBox" name="filial_select">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">color: rgb(255, 255, 255);</string>
                    </property>
@@ -1518,6 +1650,11 @@ QPushButton:pressed {
                      <width>75</width>
                      <height>25</height>
                     </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
                    </property>
                    <property name="focusPolicy">
                     <enum>Qt::WheelFocus</enum>
@@ -1820,7 +1957,7 @@ QProgressBar::chunk {
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_10">
+                <layout class="QVBoxLayout" name="verticalLayout_8">
                  <item>
                   <widget class="QLabel" name="agrup_label">
                    <property name="minimumSize">
@@ -1912,65 +2049,169 @@ QPushButton:pressed {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="desc">
+                  <widget class="QFrame" name="frame_14">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
-                     <height>50</height>
+                     <width>160</width>
+                     <height>100</height>
                     </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>50</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                    </font>
                    </property>
                    <property name="styleSheet">
-                    <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(119, 119, 119);</string>
+                    <string notr="true">background-color: rgb(119, 119, 119);</string>
                    </property>
                    <property name="frameShape">
                     <enum>QFrame::Box</enum>
                    </property>
-                   <property name="text">
-                    <string>Descrição:</string>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>3</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="agrup">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(119, 119, 119);</string>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="text">
+                       <string>Agrupamento:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_14">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Expanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="agrup">
+                  <widget class="QFrame" name="frame_13">
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>50</height>
+                     <width>160</width>
+                     <height>100</height>
                     </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>50</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                    </font>
                    </property>
                    <property name="styleSheet">
-                    <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(119, 119, 119);</string>
+                    <string notr="true">background-color: rgb(119, 119, 119);</string>
                    </property>
                    <property name="frameShape">
                     <enum>QFrame::Box</enum>
                    </property>
-                   <property name="text">
-                    <string>Agrupamento:</string>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
                    </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>3</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="desc">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(119, 119, 119);</string>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="text">
+                       <string>Descrição:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_13">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Expanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item>
@@ -1986,7 +2227,7 @@ background-color: rgb(119, 119, 119);</string>
                    </property>
                   </spacer>
                  </item>
-                 <item alignment="Qt::AlignHCenter">
+                 <item>
                   <widget class="QProgressBar" name="progressBar_search">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

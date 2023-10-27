@@ -19,13 +19,14 @@ def get_sales_data(filial, period):
     query_time = period_to_days.get(period, 0)
 
     # If query_time is still 0, it means the user provided an invalid period.
-    # You can either handle this with an error message or just return None.
     if query_time == 0:
         return None
 
     # Generate the query string and fetch the sales data
     query_string = report_query(query_time, filial)
     sales_df = download(query_string)
+
+    sales_df = sales_df.rename(columns={'B1_ZGRUPO': 'Agrupamento'})
 
     return sales_df
 
@@ -42,7 +43,7 @@ def calculate_sales_metrics(data_frame, months):
     - DataFrame: DataFrame containing the sales metrics for each B1_ZGRUPO.
     """
     # Group by B1_ZGRUPO and calculate metrics
-    metrics = data_frame.groupby('B1_ZGRUPO').agg(
+    metrics = data_frame.groupby('Agrupamento').agg(
         sales_period_count=pd.NamedAgg(column='D2_COD', aggfunc='size'),
         demand_period_sum=pd.NamedAgg(column='D2_QUANT', aggfunc='sum')
     )
@@ -65,7 +66,7 @@ def merge_data(original_data, sales_metrics):
     - DataFrame: Merged data containing original columns and sales metrics.
     """
 
-    merged_data = pd.merge(original_data, sales_metrics, on='B1_ZGRUPO', how='left')
+    merged_data = pd.merge(original_data, sales_metrics, on='Agrupamento', how='left')
     return merged_data
 
 
@@ -85,20 +86,15 @@ def create_report(filial, period):
     base_df = create_final_df(filial, func=False)
     report_df = merge_data(base_df, sales_df)
 
-    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'B2_QATU', 'QRE', 'grade', 'Segurança', 'min', 'max',
+    columns_to_keep = ['Agrupamento', 'Descrição', 'Código', 'Estoque', 'Quantidade pedida', 'Nota', 'Segurança', 'min', 'max',
                        'sales_period_count', 'demand_period_sum', 'average_demand']
 
     report_df = report_df[columns_to_keep]
 
     # Rename columns
     column_mapping = {
-        'B1_ZGRUPO': 'Agrupamento',
-        'B1_DESC': 'Descrição',
-        'B1_COD': 'Código',
-        'B2_QATU': 'Saldo CO',
-        'QRE': 'Qtd. Pedida',
-        'grade': 'Nota',
-        'Segurança': 'Segurança',
+        'Estoque': 'Saldo CO',
+        'Quantidade Pedida': 'Qtd. Pedida',
         'min': 'Min',
         'max': 'Max',
         'sales_period_count': 'Vendas no período',

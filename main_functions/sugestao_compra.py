@@ -205,12 +205,12 @@ def create_final_df(filial, func):
         'stock_suggestion': 'Sugestão de Compra'
     }
     final_df = final_df.rename(columns=column_mapping_excel)
-    final_df = final_df[final_df['Sugestão de Compra'] > 0]
     display_df = display_df.rename(columns=column_mapping_display)
     display_df = display_df[display_df['Sugestão de Compra'] > 0]
 
     if func:
         # Save the final result
+        final_df = final_df[final_df['Sugestão de Compra'] > 0]
         save_to_excel(final_df, "sugestão_compra_", filial, open_file=True)
         logger.info(f"Final data frame for branch {filial} saved to Excel.")
 

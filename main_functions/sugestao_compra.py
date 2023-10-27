@@ -179,11 +179,11 @@ def create_final_df(filial, func):
     final_df = calculate_stock_suggestion(filial, intermediate_df)
 
     # Filter columns
-    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'B2_QATU', 'QRE', 'grade', 'Segurança', 'stock_suggestion']
+    columns_to_keep = ['B1_ZGRUPO', 'B1_DESC', 'B1_COD', 'grade', 'Segurança', 'stock_suggestion']
     display_df = final_df[columns_to_keep]
 
     # Rename columns
-    column_mapping = {
+    column_mapping_display = {
         'B1_ZGRUPO': 'Agrupamento',
         'B1_DESC': 'Descrição',
         'B1_COD': 'Código',
@@ -191,7 +191,22 @@ def create_final_df(filial, func):
         'Segurança': 'Segurança',
         'stock_suggestion': 'Sugestão de Compra'
     }
-    display_df = display_df.rename(columns=column_mapping)
+
+    column_mapping_excel = {
+        'B1_ZGRUPO': 'Agrupamento',
+        'B1_DESC': 'Descrição',
+        'B1_COD': 'Código',
+        'B2_QATU': 'Estoque',
+        'QRE': 'Quantidade pedida',
+        'total_sum': 'Total',
+        'avg_last_two_months': 'Média_2',
+        'avg_last_three_months': 'Média_3',
+        'grade': 'Nota',
+        'stock_suggestion': 'Sugestão de Compra'
+    }
+    final_df = final_df.rename(columns=column_mapping_excel)
+    final_df = final_df[final_df['Sugestão de Compra'] > 0]
+    display_df = display_df.rename(columns=column_mapping_display)
     display_df = display_df[display_df['Sugestão de Compra'] > 0]
 
     if func:

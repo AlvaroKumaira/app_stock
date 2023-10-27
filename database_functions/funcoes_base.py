@@ -62,7 +62,7 @@ def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=l
         os.makedirs(result_folder)
 
     # Determine the path for the Excel file inside 'Resultado' folder.
-    current_timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    current_timestamp = datetime.datetime.now().strftime('%Y%m%d')
     excel_file_path = os.path.join(result_folder, f'{filename_prefix}_{filial}_{current_timestamp}.xlsx')
 
     # Write the DataFrame to an Excel file.

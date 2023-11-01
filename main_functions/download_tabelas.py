@@ -39,61 +39,34 @@ def download_saldo(filial):
 
     # Rename columns
     column_mapping = {
-        "B1_COD": "CODIGO",
-        "B1_TIPO": "TP",
-        "B1_GRUPO": "GRUPO",
-        "B1_DESC": "DESCRICAO",
-        "BZ_LOCALI2": "ENDEREÇO",
-        "B1_UM": "U.M.",
-        "B2_FILIAL": "FL",
-        "B2_LOCAL": "ARMZ",
-        "B2_QATU_COPY": "SALDO EM ESTOQUE",
-        "TEMP_1": "EMPENHO PARA REQ/PV/RESERVA",
-        "B2_QATU": "ESTOQUE DISPONIVEL",
-        "B2_CM1": "C UNITARIO",
-        "B2_VATU1": "VALOR EM ESTOQUE",
-        "TEMP_2": "VALOR EMPENHADO",
-        "B1_UCOM": "DT.ULT.COMPRA",
-        "B2_USAI": "DT.ULT.SAIDA",
-        "DAYS_DIFF": "DIAS"
+        "B1_ZGRUPO": "Agrupamento",
+        "B1_COD": "Código",
+        "B1_TIPO": "Tipo",
+        "B1_GRUPO": "Grupo",
+        "B1_DESC": "Descrição",
+        "BZ_LOCALI2": "Endereço",
+        "B1_UM": "UM",
+        "B2_FILIAL": "Filial",
+        "B2_LOCAL": "Armazém",
+        "B2_QATU_COPY": "Saldo em Estoque",
+        "B2_QATU": "Estoque disponível",
+        "B2_CM1": "Custo unitário",
+        "B2_VATU1": "Valor em estoque",
     }
     data_frame.rename(columns=column_mapping, inplace=True)
     # Replace blank strings with NaN
     data_frame.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 
-    # Convert string dates to datetime objects using the renamed columns
-    data_frame["DT.ULT.COMPRA"] = pd.to_datetime(data_frame["DT.ULT.COMPRA"], format='%Y%m%d', errors='coerce')
-    data_frame["DT.ULT.SAIDA"] = pd.to_datetime(data_frame["DT.ULT.SAIDA"], format='%Y%m%d', errors='coerce')
-
-    # Remove trailing spaces from certain columns
-    for column in ["CODIGO", "DESCRICAO"]:
-        data_frame[column] = data_frame[column].str.rstrip()
+    # Remove spaces from certain columns
+    for column in ["Código", "Descrição"]:
+        data_frame[column] = data_frame[column].str.strip()
 
     try:
         # Save DataFrame to Excel and open the file
-        excel_file_path, book, sheet = save_to_excel(data_frame, 'saldo_analítico', filial, open_file=True)
+        save_to_excel(data_frame, 'saldo_analítico', filial, open_file=True)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
-
-    # Specify your column formats
-    column_format = {
-        "CODIGO": "0",
-        "SALDO EM ESTOQUE": "#,##0.00",
-        "EMPENHO PARA REQ/PV/RESERVA": "#,##0.00",
-        "ESTOQUE DISPONIVEL": "#,##0.00",
-        "C UNITARIO": "#,##0.00",
-        "VALOR EM ESTOQUE": "#,##0.00",
-        "VALOR EMPENHADO": "#,##0.00",
-        "DT.ULT.COMPRA": numbers.FORMAT_DATE_DDMMYY,
-        "DT.ULT.SAIDA": numbers.FORMAT_DATE_DDMMYY
-    }
-    for col, number_format in column_format.items():
-        col_index = data_frame.columns.get_loc(col) + 1  # get column index in Excel (1-indexed)
-        for row in range(2, len(data_frame) + 2):  # Apply formatting row by row (2+ because of 1-indexing and header)
-            sheet.cell(row=row, column=col_index).number_format = number_format
-
-    book.save(excel_file_path)
 
 
 def download_pedidos(filial, date):
@@ -128,18 +101,18 @@ def download_pedidos(filial, date):
         return
     # Rename columns
     column_mapping = {
+        "B1_ZGRUPO": "Agrupamento",
         "C7_NUM": "Num.PC",
         "C7_FORNECE": "Fornecedor",
-        "A2_LOJA_COPY": "Loja",
-        "A2_NOME": "Razao Social",
+        "A2_LOJA": "Loja",
+        "A2_NOME": "Razão Social",
         "A2_TEL": "Telefone",
         "C7_ITEM": "Item",
         "C7_NUMSC": "Numero da SC",
         "C7_PRODUTO": "Produto",
-        "C7_DESCRI": "Descricao",
+        "C7_DESCRI": "Descrição",
         "B1_GRUPO": "Grupo",
-        "EMI": "Emissao",
-        "A2_LOJA": "Lj",
+        "EMI": "Emissão",
         "ENT": "Entrega",
         "C7_QUANT": "Quantidade",
         "C7_UM": "UM",
@@ -158,27 +131,20 @@ def download_pedidos(filial, date):
     data_frame.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 
     # Remove trailing spaces from certain columns
-    for column in ["Razao Social", "Telefone", "Produto", "Descricao", "Grupo"]:
-        data_frame[column] = data_frame[column].str.rstrip()
+    for column in ["Razão Social", "Telefone", "Produto", "Descrição", "Grupo"]:
+        data_frame[column] = data_frame[column].str.strip()
+
+    # Convert specified columns to date
+    columns_to_date = ['Emissão', 'Entrega']
+    for column in columns_to_date:
+        data_frame[column] = pd.to_datetime(data_frame[column], format='%Y%m%d').dt.date
 
     try:
         # Save DataFrame to Excel and open the file
-        excel_file_path, book, sheet = save_to_excel(data_frame, 'pedidos', filial, open_file=True)
+        save_to_excel(data_frame, 'pedidos', filial, open_file=True)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
-
-    # Specify your column formats
-    column_format = {
-        "Emissao": numbers.FORMAT_DATE_DDMMYY,
-        "Entrega": numbers.FORMAT_DATE_DDMMYY
-    }
-    for col, number_format in column_format.items():
-        col_index = data_frame.columns.get_loc(col) + 1  # get column index in Excel (1-indexed)
-        for row in range(2, len(data_frame) + 2):  # Apply formatting row by row (2+ because of 1-indexing and header)
-            sheet.cell(row=row, column=col_index).number_format = number_format
-
-    book.save(excel_file_path)
 
 
 def download_faturamento(filial, date):
@@ -212,46 +178,39 @@ def download_faturamento(filial, date):
         logger.error(f"An error occurred during download: {str(e)}")
         return
 
-    # Rename columns
     column_mapping = {
+        "D2_EMISSAO": "Data",
+        "B1_ZGRUPO": "Agrupamento",
+        "D2_COD": "Código",
+        "B1_DESC": "Descrição",
+        "D2_UM": "UM",
         "D2_TP": "TP",
-        "D2_COD": "Codigo",
-        "B1_DESC": "Descricao",
+        "D2_CLIENTE": "Cod. Cliente",
+        "A1_NOME": "Cliente",
+        "F4_TEXTO": "Movimentação",
         "D2_QUANT": "Quantidade",
-        "QUANT_DUP": "Qtd.Movim.",
-        "D2_UM": "Unidade",
-        "D2_CUSTO1": "(A)Custo Total",
-        "D2_PRCVEN": "Custo por Unidade",
         "VFB": "Val Faturado Bruto",
-        "VF": "(B)Valor Faturado",
-        "INF": "Impostos nao Faturados",
-        "VFINP": "Val Faturado- Imp. Nao Fat.",
-        "D2_MARGEM": "Margem",
-        "TEMP1": "Mix *Mar",
-        "TEMP2": "",
-        "TEMP3": "Mix",
-        "TEMP4": "Custo de Reposicao",
-        "TEMP5": "Variacao"
+        "D2_MARGEM": "Margem"
     }
+    # Rename columns
     data_frame.rename(columns=column_mapping, inplace=True)
 
     # Replace blank strings with NaN
     data_frame.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 
     # Remove trailing spaces from certain columns
-    for column in ["Codigo", "Descricao"]:
-        data_frame[column] = data_frame[column].str.rstrip()
+    for column in ["Código", "Descrição"]:
+        data_frame[column] = data_frame[column].str.strip()
 
     # Convert specified columns to numeric data
-    columns_to_sum = ["Quantidade", "Qtd.Movim.", "(A)Custo Total", "Custo por Unidade",
-                      "Val Faturado Bruto", "(B)Valor Faturado", "Val Faturado- Imp. Nao Fat.", "Margem"]
+    columns_to_sum = ["Quantidade", "Val Faturado Bruto", "Margem"]
     data_frame[columns_to_sum] = data_frame[columns_to_sum].apply(pd.to_numeric, errors='coerce')
 
-    # Aggregate values by 'Codigo' and sum the values of the specified columns
-    data_frame = data_frame.groupby(['Codigo', 'Descricao', 'Unidade', 'TP'], as_index=False)[columns_to_sum].sum()
+    # Convert specified columns to datetime
+    data_frame['Data'] = pd.to_datetime(data_frame['Data'], format='%Y%m%d').dt.date
 
     # Calculate 'valor unitario'
-    data_frame['valor unitario'] = (data_frame['Val Faturado Bruto'] / data_frame['Quantidade']).round(2)
+    data_frame['Valor unitário'] = (data_frame['Val Faturado Bruto'] / data_frame['Quantidade']).round(2)
 
     try:
         # Save DataFrame to Excel and optionally open the file

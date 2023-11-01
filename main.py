@@ -1,4 +1,5 @@
 import logging
+import os
 from user_interface.main_ui import MainWindowLogic
 from PyQt5.QtWidgets import QApplication
 from database_functions.params_update import save_excel_locally
@@ -34,6 +35,7 @@ def main():
 
         # Start the PyQt event loop.
         app.exec_()
+        logging.info(f"Current working directory: {os.getcwd()}")
 
     except Exception as e:
         logging.error(f"An unexpected error occurred while creating the session: {e}")

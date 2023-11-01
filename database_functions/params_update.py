@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def is_network_reachable(network_name="CENTRO OESTE"):
     try:
         # Execute a command to get the names of connected network profiles
-        networks = subprocess.check_output("netsh wlan show interfaces", shell=True).decode('utf-8')
+        networks = subprocess.check_output("netsh wlan show interfaces", shell=True).decode('utf-8', errors='ignore')
         # Check if the specified network name exists in the command output
         return network_name in networks
     except Exception as e:

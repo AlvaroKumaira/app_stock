@@ -9,5 +9,8 @@
         <file>../dependencies/settings.png</file>
         <file>../dependencies/background.png</file>
         <file>../dependencies/spreadsheet.png</file>
+        <file>../dependencies/close.png</file>
+        <file>../dependencies/collapse.png</file>
+        <file>../dependencies/download.png</file>
     </qresource>
 </RCC>

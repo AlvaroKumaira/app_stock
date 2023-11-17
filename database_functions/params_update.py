@@ -18,14 +18,24 @@ def is_network_reachable(network_name="CENTRO OESTE"):
         return False
 
 
-def save_excel_locally(shared_folder_path, file_name, local_folder="params"):
+def save_excel_locally(file_name, data=None, local_folder="params", shared_folder_path=None):
     # Ensure the local folder exists
     if not os.path.exists(local_folder):
         os.makedirs(local_folder)
 
     local_file_path = os.path.join(local_folder, file_name)
 
-    if is_network_reachable():
+    # If 'data' is a DataFrame, save it directly to Excel
+    if isinstance(data, pd.DataFrame):
+        try:
+            data.to_excel(local_file_path, index=False)
+            logger.info(f"DataFrame saved to {local_file_path}")
+        except Exception as e:
+            logger.error(f"An error occurred while saving the DataFrame: {e}")
+        return
+
+    # If a shared_folder_path is provided and 'data' is None, attempt to copy file from network
+    if shared_folder_path and data is None and is_network_reachable():
         try:
             # Try to connect to the shared folder and get the file
             network_file_path = os.path.join(shared_folder_path, file_name)
@@ -35,5 +45,5 @@ def save_excel_locally(shared_folder_path, file_name, local_folder="params"):
             logger.error(f"No such file or directory: {network_file_path}")
         except Exception as e:
             logger.error(f"An error occurred while copying the file: {e}")
-    else:
-        logger.error("Network is not reachable. Using existing local file if available.")
+    elif not shared_folder_path and data is None:
+        logger.error("No shared folder path provided and no DataFrame to save.")

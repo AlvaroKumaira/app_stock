@@ -164,16 +164,13 @@ def create_final_df(filial, func):
     # Join the tables
     joined_table = join_parts(general_info, order_info, fat_info)
 
-    if filial == "0101":
-        # Fetch params from MySQL and prepare for merging
-        params_df = merge_sheets()
-        joined_table['B1_ZGRUPO'] = joined_table['B1_ZGRUPO'].astype(str)
-        params_df['B1_ZGRUPO'] = params_df['B1_ZGRUPO'].astype(str)
+    # Fetch params from params and prepare for merging
+    params_df = merge_sheets(filial=filial)
+    joined_table['B1_ZGRUPO'] = joined_table['B1_ZGRUPO'].astype(str)
+    params_df['B1_ZGRUPO'] = params_df['B1_ZGRUPO'].astype(str)
 
-        # Merge the tables and calculate necessary columns
-        intermediate_df = pd.merge(joined_table, params_df, on='B1_ZGRUPO', how='left')
-    else:
-        intermediate_df = joined_table
+    # Merge the tables and calculate necessary columns
+    intermediate_df = pd.merge(joined_table, params_df, on='B1_ZGRUPO', how='left')
 
     intermediate_df = calculate_min_max_columns(filial, intermediate_df)
     final_df = calculate_stock_suggestion(filial, intermediate_df)

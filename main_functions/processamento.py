@@ -78,10 +78,7 @@ def calculate_min_max_columns(filial, data_frame):
             daily_avg = 0
 
         computed_stock = daily_avg * 10
-        if filial == '0101':
-            return math.ceil(max(computed_stock, row['Segurança']))
-        else:
-            return math.ceil(computed_stock)
+        return math.ceil(max(computed_stock, row['Segurança']))
 
     data_frame['min'] = data_frame.apply(calculate_min_stock, axis=1)
 
@@ -121,8 +118,8 @@ def calculate_stock_suggestion(filial, data_frame):
     def suggestion(row):
         """Calculate the stock suggestion based on the rules provided."""
 
-        # For filial '0101', return 0 if N_Comprar value is 1
-        if filial == '0101' and row['N_comprar'] == 1:
+        # Return 0 if N_Comprar value is 1
+        if row['N_comprar'] == 1:
             return 0
 
         # Calculate the sum of B2_QATU and QRE

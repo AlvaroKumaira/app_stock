@@ -9,7 +9,7 @@ from database_functions.queries import pedidos, faturamento, saldo_analitico
 logger = logging.getLogger(__name__)
 
 
-def download_saldo(filial):
+def download_saldo(filial, open_flag):
     """
     Downloads and processes data for the saldo_analitico query, and saves the result to an Excel file.
 
@@ -63,13 +63,16 @@ def download_saldo(filial):
 
     try:
         # Save DataFrame to Excel and open the file
-        save_to_excel(data_frame, 'saldo_analítico', filial, open_file=True)
+        if open_flag:
+            save_to_excel(data_frame, 'saldo_analítico', filial, open_file=True)
+        else:
+            save_to_excel(data_frame, 'saldo_analítico', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
 
 
-def download_pedidos(filial, date):
+def download_pedidos(filial, date, open_flag):
     """
     Downloads and processes data for the pedidos query, and saves the result to an Excel file.
 
@@ -141,13 +144,16 @@ def download_pedidos(filial, date):
 
     try:
         # Save DataFrame to Excel and open the file
-        save_to_excel(data_frame, 'pedidos', filial, open_file=True)
+        if open_flag:
+            save_to_excel(data_frame, 'pedidos', filial, open_file=True)
+        else:
+            save_to_excel(data_frame, 'pedidos', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
 
 
-def download_faturamento(filial, date):
+def download_faturamento(filial, date, open_flag):
     """
     Downloads and processes data for the faturamento query, and saves the result to an Excel file.
 
@@ -214,7 +220,10 @@ def download_faturamento(filial, date):
 
     try:
         # Save DataFrame to Excel and optionally open the file
-        save_to_excel(data_frame, 'faturamento', filial, open_file=False)
+        if open_flag:
+            save_to_excel(data_frame, 'faturamento', filial, open_file=True)
+        else:
+            save_to_excel(data_frame, 'faturamento', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
@@ -245,21 +254,26 @@ def download_tabelas(filial, saldo, pedidos, faturamento, pedidos_selected_date,
     all_filials = ['0101', '0103', '0104', "0105"]
 
     # If filial is "Todas", loop through all branches
-    filials_to_process = all_filials if filial == 'Todas' else [filial]
+    if filial == 'Todas':
+        filials_to_process = all_filials
+        open_flag = False
+    else:
+        filials_to_process = [filial]
+        open_flag = True
 
     for current_filial in filials_to_process:
         logger.info(f"Starting the download process for filial: {current_filial}")
 
         # Download data for the saldo_analitico query if requested
         if saldo:
-            download_saldo(current_filial)
+            download_saldo(current_filial, open_flag)
 
         # Download data for the pedidos query if requested
         if pedidos:
-            download_pedidos(current_filial, pedidos_selected_date)
+            download_pedidos(current_filial, pedidos_selected_date, open_flag)
 
         # Download data for the faturamento query if requested
         if faturamento:
-            download_faturamento(current_filial, faturamento_selected_date)
+            download_faturamento(current_filial, faturamento_selected_date, open_flag)
 
     logger.info("Download process completed.")

@@ -39,7 +39,7 @@ def download(query, params=None):
     return data_frame
 
 
-def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=logger):
+def save_to_excel(data_frame, filename_prefix, filial, open_file=False):
     """
     Saves a DataFrame to an Excel file on the user's Desktop in a folder named 'Resultado'.
     
@@ -48,7 +48,6 @@ def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=l
     - filename_prefix (str): Prefix for the Excel filename.
     - filial (str): Additional information for the Excel filename.
     - open_file (bool, optional): If True, the Excel file will be opened. Defaults to False.
-    - logger (Logger, optional): Logger for recording events. Defaults to the global logger.
 
     Returns:
     - str: Path to the saved Excel file. If open_file is True, also returns the workbook and sheet objects.
@@ -72,8 +71,9 @@ def save_to_excel(data_frame, filename_prefix, filial, open_file=False, logger=l
 
     # If open_file is True, open the Excel file and return workbook and sheet objects.
     if open_file:
-        book = load_workbook(excel_file_path)  # Load the workbook.
-        sheet = book['Sheet1']  # Access the default sheet.
-        return excel_file_path, book, sheet
+        try:
+            os.startfile(excel_file_path)
+        except Exception as e:
+            logger.error(f"Could not open the file: {e}")
 
     return excel_file_path

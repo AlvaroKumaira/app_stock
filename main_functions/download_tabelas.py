@@ -4,6 +4,7 @@ import numpy as np
 import logging
 from database_functions.funcoes_base import download, save_to_excel
 from database_functions.queries import pedidos, faturamento, saldo_analitico
+from main_functions.processamento import classify_stock_items
 
 # Get a logger
 logger = logging.getLogger(__name__)
@@ -48,7 +49,6 @@ def download_saldo(filial, open_flag):
         "B1_UM": "UM",
         "B2_FILIAL": "Filial",
         "B2_LOCAL": "Armazém",
-        "B2_QATU_COPY": "Saldo em Estoque",
         "B2_QATU": "Estoque disponível",
         "B2_CM1": "Custo unitário",
         "B2_VATU1": "Valor em estoque",
@@ -57,16 +57,15 @@ def download_saldo(filial, open_flag):
     # Replace blank strings with NaN
     data_frame.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 
-    # Remove spaces from certain columns
-    for column in ["Código", "Descrição"]:
-        data_frame[column] = data_frame[column].str.strip()
+    final_df = classify_stock_items(data_frame)
+    final_df = final_df.drop_duplicates()
 
     try:
         # Save DataFrame to Excel and open the file
         if open_flag:
-            save_to_excel(data_frame, 'saldo_analítico', filial, open_file=True)
+            save_to_excel(final_df, 'saldo_analítico', filial, open_file=True)
         else:
-            save_to_excel(data_frame, 'saldo_analítico', filial, open_file=False)
+            save_to_excel(final_df, 'saldo_analítico', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
@@ -104,6 +103,7 @@ def download_pedidos(filial, date, open_flag):
         return
     # Rename columns
     column_mapping = {
+        "C7_FILIAL": "Filial",
         "B1_ZGRUPO": "Agrupamento",
         "C7_NUM": "Num.PC",
         "C7_FORNECE": "Fornecedor",
@@ -142,12 +142,15 @@ def download_pedidos(filial, date, open_flag):
     for column in columns_to_date:
         data_frame[column] = pd.to_datetime(data_frame[column], format='%Y%m%d').dt.date
 
+    final_df = classify_stock_items(data_frame)
+    final_df = final_df.drop_duplicates()
+
     try:
         # Save DataFrame to Excel and open the file
         if open_flag:
-            save_to_excel(data_frame, 'pedidos', filial, open_file=True)
+            save_to_excel(final_df, 'pedidos', filial, open_file=True)
         else:
-            save_to_excel(data_frame, 'pedidos', filial, open_file=False)
+            save_to_excel(final_df, 'pedidos', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return
@@ -218,12 +221,30 @@ def download_faturamento(filial, date, open_flag):
     # Calculate 'valor unitario'
     data_frame['Valor unitário'] = (data_frame['Val Faturado Bruto'] / data_frame['Quantidade']).round(2)
 
+    final_df = classify_stock_items(data_frame)
+
+    # Get the list of all column names
+    columns = list(final_df.columns)
+
+    # Remove 'class_item' from its current position
+    columns.remove('Ind. Stk')
+
+    # Find the index of the 'Descrição' column to insert 'class_item' after it
+    description_index = columns.index('Descrição')
+
+    # Insert 'class_item' after 'Descrição'
+    columns.insert(description_index + 1, 'Ind. Stk')
+
+    # Reorder the DataFrame using the updated columns list
+    df = final_df[columns].copy()
+    df = df.drop_duplicates()
+
     try:
         # Save DataFrame to Excel and optionally open the file
         if open_flag:
-            save_to_excel(data_frame, 'faturamento', filial, open_file=True)
+            save_to_excel(df, 'faturamento', filial, open_file=True)
         else:
-            save_to_excel(data_frame, 'faturamento', filial, open_file=False)
+            save_to_excel(df, 'faturamento', filial, open_file=False)
     except Exception as e:
         logger.error(f"An error occurred while saving to Excel: {str(e)}")
         return

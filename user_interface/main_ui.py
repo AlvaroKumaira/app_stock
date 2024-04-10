@@ -36,6 +36,7 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
         self.progress_sug.hide()
         self.progressBar_search.hide()
         self.progressBar_2.hide()
+        self.startup_bar.hide()
 
         # Define a dictionary mapping buttons to view indexes
         button_to_view = {
@@ -104,15 +105,6 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
             self.update_excel_thread.progress_started.connect(self.on_progress_started)
             self.update_excel_thread.start()
 
-            # Start the thred for updating the inventory file
-            self.update_inv_thread = DownloadThread(
-                create_report,
-                'Todas', '12 meses', False
-            )
-            self.update_inv_thread.finished_with_result.connect(self.on_update_inv_finished)
-            self.update_inv_thread.progress_started.connect(self.on_progress_started)
-            self.update_inv_thread.start()
-
             # Start the thread for creating the stock suggestion file
             self.create_df_thread = DownloadThread(
                 create_final_df,
@@ -121,8 +113,16 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
             )
             self.create_df_thread.finished_with_result.connect(self.on_create_df_finished)
             self.create_df_thread.progress_started.connect(self.on_progress_started)
-            self.create_df_thread.progress_stopped.connect(self.on_progress_stopped)
             self.create_df_thread.start()
+
+            # Start the thred for updating the inventory file
+            self.update_inv_thread = DownloadThread(
+                create_report,
+                'Todas', '12 meses', False
+            )
+            self.update_inv_thread.finished_with_result.connect(self.on_update_inv_finished)
+            self.update_inv_thread.progress_started.connect(self.on_progress_started)
+            self.update_inv_thread.progress_stopped.connect(self.on_progress_stopped)
         else:
             self.startup_bar.hide()
             logger.error("Application update has already been processed today")
@@ -130,6 +130,8 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
     def on_create_df_finished(self, result):
         # Handle the result of the df creation
         save_excel_locally("Base_df.xlsx", data=result)
+
+        self.update_inv_thread.start()
 
     def on_update_inv_finished(self, result):
         save_excel_locally("inv_df.xlsx", data=result)

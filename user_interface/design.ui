@@ -632,7 +632,7 @@ background-color: rgb(78, 128, 255);</string>
              <enum>QFrame::Sunken</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="home">
              <property name="styleSheet">
@@ -1043,6 +1043,12 @@ QProgressBar::chunk:indeterminate {
                        </property>
                        <item row="4" column="2">
                         <widget class="QPushButton" name="download_button">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>75</width>
@@ -1125,6 +1131,12 @@ QPushButton:pressed {
                        </item>
                        <item row="0" column="1">
                         <widget class="QComboBox" name="filial_download">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>100</width>
@@ -1284,6 +1296,12 @@ QComboBox QAbstractItemView {
                        </item>
                        <item row="2" column="1">
                         <widget class="QDateEdit" name="pedidos_date_label">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>100</width>
@@ -1361,6 +1379,12 @@ QDateEdit QCalendarWidget QToolButton:hover {
                        </item>
                        <item row="3" column="1">
                         <widget class="QDateEdit" name="faturamento_date_label">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="focusPolicy">
                           <enum>Qt::TabFocus</enum>
                          </property>
@@ -1578,6 +1602,12 @@ border-color: black black transparent black;</string>
                        </property>
                        <item row="2" column="1" alignment="Qt::AlignLeft">
                         <widget class="QComboBox" name="table_periodo_select">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>100</width>
@@ -1692,6 +1722,12 @@ QComboBox QAbstractItemView {
                        </item>
                        <item row="0" column="1" alignment="Qt::AlignLeft">
                         <widget class="QComboBox" name="table_filial_select">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>100</width>
@@ -1804,6 +1840,12 @@ QComboBox QAbstractItemView {
                        </item>
                        <item row="3" column="2" alignment="Qt::AlignRight">
                         <widget class="QPushButton" name="start_table_button">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="minimumSize">
                           <size>
                            <width>75</width>
@@ -2426,8 +2468,8 @@ QPushButton:pressed {
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>468</width>
-                         <height>497</height>
+                         <width>98</width>
+                         <height>28</height>
                         </rect>
                        </property>
                       </widget>
@@ -4116,7 +4158,7 @@ background-color: rgb(238, 238, 238);</string>
                    <x>350</x>
                    <y>20</y>
                    <width>651</width>
-                   <height>331</height>
+                   <height>281</height>
                   </rect>
                  </property>
                  <property name="minimumSize">
@@ -4214,10 +4256,10 @@ background-color: rgb(238, 238, 238);</string>
                 <widget class="QProgressBar" name="progressBar_search">
                  <property name="geometry">
                   <rect>
-                   <x>940</x>
-                   <y>540</y>
-                   <width>150</width>
-                   <height>23</height>
+                   <x>1070</x>
+                   <y>410</y>
+                   <width>23</width>
+                   <height>150</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -4228,7 +4270,7 @@ background-color: rgb(238, 238, 238);</string>
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>150</width>
+                   <width>23</width>
                    <height>0</height>
                   </size>
                  </property>
@@ -4269,6 +4311,9 @@ QProgressBar::chunk:indeterminate {
                  <property name="textVisible">
                   <bool>false</bool>
                  </property>
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
                  <property name="invertedAppearance">
                   <bool>false</bool>
                  </property>
@@ -4280,9 +4325,9 @@ QProgressBar::chunk:indeterminate {
                  <property name="geometry">
                   <rect>
                    <x>10</x>
-                   <y>360</y>
+                   <y>310</y>
                    <width>250</width>
-                   <height>171</height>
+                   <height>241</height>
                   </rect>
                  </property>
                  <property name="minimumSize">
@@ -4305,7 +4350,7 @@ QProgressBar::chunk:indeterminate {
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_17">
                   <property name="spacing">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <property name="leftMargin">
                    <number>0</number>
@@ -4320,20 +4365,69 @@ QProgressBar::chunk:indeterminate {
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QFrame" name="frame_7">
+                   <widget class="QLabel" name="title_matriz">
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">border-style: solid;
+border-width: 0 0 1px 0;
+border-color: transparent transparent black transparent;</string>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="text">
+                     <string>Matriz</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="margin">
+                     <number>4</number>
+                    </property>
+                    <property name="textInteractionFlags">
+                     <set>Qt::NoTextInteraction</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="frame_34">
                     <property name="minimumSize">
                      <size>
-                      <width>0</width>
+                      <width>160</width>
                       <height>40</height>
                      </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
+                     <enum>QFrame::Plain</enum>
                     </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_20">
+                    <property name="lineWidth">
+                     <number>0</number>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_34">
                      <property name="spacing">
                       <number>0</number>
                      </property>
@@ -4350,33 +4444,39 @@ QProgressBar::chunk:indeterminate {
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QLabel" name="title_matriz">
+                      <widget class="QLabel" name="ind_stk_m">
+                       <property name="minimumSize">
+                        <size>
+                         <width>100</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent black transparent;</string>
+                        <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(238, 238, 238);</string>
                        </property>
                        <property name="frameShape">
                         <enum>QFrame::NoFrame</enum>
                        </property>
+                       <property name="lineWidth">
+                        <number>1</number>
+                       </property>
                        <property name="text">
-                        <string>MATRIZ</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>4</number>
+                        <string>Indicador de Estoque:</string>
                        </property>
                        <property name="textInteractionFlags">
-                        <set>Qt::NoTextInteraction</set>
+                        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                        </property>
                       </widget>
                      </item>
@@ -4391,17 +4491,23 @@ border-color: transparent transparent black transparent;</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
                      <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="lineWidth">
+                     <number>0</number>
                     </property>
                     <layout class="QHBoxLayout" name="horizontalLayout_26">
                      <property name="spacing">
@@ -4498,11 +4604,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -4603,6 +4712,12 @@ background-color: rgb(238, 238, 238);</string>
                      <size>
                       <width>160</width>
                       <height>40</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
                      </size>
                     </property>
                     <property name="styleSheet">
@@ -4709,10 +4824,10 @@ background-color: rgb(238, 238, 238);</string>
                 <widget class="QFrame" name="search_result_cariacica_frame">
                  <property name="geometry">
                   <rect>
-                   <x>280</x>
-                   <y>360</y>
+                   <x>270</x>
+                   <y>310</y>
                    <width>250</width>
-                   <height>171</height>
+                   <height>241</height>
                   </rect>
                  </property>
                  <property name="minimumSize">
@@ -4733,9 +4848,9 @@ background-color: rgb(238, 238, 238);</string>
                  <property name="frameShadow">
                   <enum>QFrame::Plain</enum>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_21">
+                 <layout class="QVBoxLayout" name="verticalLayout_20">
                   <property name="spacing">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <property name="leftMargin">
                    <number>0</number>
@@ -4750,20 +4865,60 @@ background-color: rgb(238, 238, 238);</string>
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QFrame" name="frame_15">
+                   <widget class="QLabel" name="title_cariacica">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>40</height>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">border-style: solid;
+border-width: 0 0 1px 0;
+border-color: transparent transparent black transparent;</string>
+                    </property>
+                    <property name="text">
+                     <string>Cariacica</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="margin">
+                     <number>4</number>
+                    </property>
+                    <property name="textInteractionFlags">
+                     <set>Qt::NoTextInteraction</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="frame">
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
                      </size>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
+                     <enum>QFrame::Plain</enum>
                     </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_22">
+                    <layout class="QHBoxLayout" name="horizontalLayout_4">
                      <property name="spacing">
                       <number>0</number>
                      </property>
@@ -4780,30 +4935,39 @@ background-color: rgb(238, 238, 238);</string>
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QLabel" name="title_cariacica">
+                      <widget class="QLabel" name="ind_stk_c">
+                       <property name="minimumSize">
+                        <size>
+                         <width>100</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent black transparent;</string>
+                        <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(238, 238, 238);</string>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>1</number>
                        </property>
                        <property name="text">
-                        <string>Cariacica</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>4</number>
+                        <string>Indicador de Estoque:</string>
                        </property>
                        <property name="textInteractionFlags">
-                        <set>Qt::NoTextInteraction</set>
+                        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                        </property>
                       </widget>
                      </item>
@@ -4818,11 +4982,14 @@ border-color: transparent transparent black transparent;</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -4925,11 +5092,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5032,11 +5202,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent transparent transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5136,10 +5309,10 @@ background-color: rgb(238, 238, 238);</string>
                 <widget class="QFrame" name="search_result_pocone_frame">
                  <property name="geometry">
                   <rect>
-                   <x>550</x>
-                   <y>360</y>
+                   <x>530</x>
+                   <y>310</y>
                    <width>250</width>
-                   <height>171</height>
+                   <height>241</height>
                   </rect>
                  </property>
                  <property name="minimumSize">
@@ -5160,9 +5333,9 @@ background-color: rgb(238, 238, 238);</string>
                  <property name="frameShadow">
                   <enum>QFrame::Plain</enum>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_23">
+                 <layout class="QVBoxLayout" name="verticalLayout_21">
                   <property name="spacing">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <property name="leftMargin">
                    <number>0</number>
@@ -5181,7 +5354,13 @@ background-color: rgb(238, 238, 238);</string>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>40</height>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>25</height>
                      </size>
                     </property>
                     <property name="frameShape">
@@ -5208,6 +5387,12 @@ background-color: rgb(238, 238, 238);</string>
                      </property>
                      <item>
                       <widget class="QLabel" name="title_pocone">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
@@ -5238,6 +5423,76 @@ border-color: transparent transparent black transparent;</string>
                    </widget>
                   </item>
                   <item>
+                   <widget class="QFrame" name="frame_4">
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_5">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="ind_stk_p">
+                       <property name="minimumSize">
+                        <size>
+                         <width>100</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(238, 238, 238);</string>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>1</number>
+                       </property>
+                       <property name="text">
+                        <string>Indicador de Estoque:</string>
+                       </property>
+                       <property name="textInteractionFlags">
+                        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QFrame" name="frame_26">
                     <property name="minimumSize">
                      <size>
@@ -5245,11 +5500,14 @@ border-color: transparent transparent black transparent;</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5352,11 +5610,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5459,11 +5720,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent transparent transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5563,10 +5827,10 @@ background-color: rgb(238, 238, 238);</string>
                 <widget class="QFrame" name="search_result_paraua_frame">
                  <property name="geometry">
                   <rect>
-                   <x>820</x>
-                   <y>360</y>
+                   <x>790</x>
+                   <y>310</y>
                    <width>250</width>
-                   <height>171</height>
+                   <height>241</height>
                   </rect>
                  </property>
                  <property name="minimumSize">
@@ -5587,9 +5851,9 @@ background-color: rgb(238, 238, 238);</string>
                  <property name="frameShadow">
                   <enum>QFrame::Plain</enum>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_25">
+                 <layout class="QVBoxLayout" name="verticalLayout_22">
                   <property name="spacing">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <property name="leftMargin">
                    <number>0</number>
@@ -5635,6 +5899,12 @@ background-color: rgb(238, 238, 238);</string>
                      </property>
                      <item>
                       <widget class="QLabel" name="title_paraua">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
                        <property name="font">
                         <font>
                          <pointsize>10</pointsize>
@@ -5661,6 +5931,76 @@ border-color: transparent transparent black transparent;</string>
                        </property>
                       </widget>
                      </item>
+                     <item>
+                      <widget class="QFrame" name="frame_7">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>50</height>
+                        </size>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <layout class="QHBoxLayout" name="horizontalLayout_25">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="ind_stk_pa">
+                          <property name="minimumSize">
+                           <size>
+                            <width>100</width>
+                            <height>25</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>25</height>
+                           </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(238, 238, 238);</string>
+                          </property>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="lineWidth">
+                           <number>1</number>
+                          </property>
+                          <property name="text">
+                           <string>Indicador de Estoque:</string>
+                          </property>
+                          <property name="textInteractionFlags">
+                           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
                     </layout>
                    </widget>
                   </item>
@@ -5672,11 +6012,14 @@ border-color: transparent transparent black transparent;</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5779,11 +6122,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent gray transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -5886,11 +6232,14 @@ background-color: rgb(238, 238, 238);</string>
                       <height>40</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>50</height>
+                     </size>
+                    </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: rgb(238, 238, 238);
-border-style: solid;
-border-width: 0 0 1px 0;
-border-color: transparent transparent transparent transparent;</string>
+                     <string notr="true">background-color: rgb(238, 238, 238);</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>

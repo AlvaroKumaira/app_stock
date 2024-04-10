@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 import math
 import logging
 
@@ -135,3 +136,56 @@ def calculate_stock_suggestion(data_frame):
     data_frame['stock_suggestion'] = data_frame.apply(suggestion, axis=1)
     logger.info("Stock suggestions calculated.")
     return data_frame
+
+
+def classify_stock_items(data_frame):
+    data_file_path = os.path.join('params', 'Base_df.xlsx')
+    data_df = pd.read_excel(data_file_path)
+
+    data_df['Filial'] = data_df['Filial'].astype(str).str.zfill(4)
+
+    # Check if 'Ind. Stk' column already exists
+    if 'Ind. Stk' not in data_df.columns:
+        # Fill NaN values in specified columns with 0
+        columns_to_fill = ['N_comprar', 'Segurança', 'Nota']
+        for column in columns_to_fill:
+            data_df[column] = data_df[column].fillna(0)
+
+        data_df['Ind. Stk'] = np.nan  # Ensure 'Ind. Stk' column is initially set to NaN
+
+        # Function to determine 'Ind. Stk' value for each group
+        def determine_ind_stk(group):
+            if (group['N_comprar'] == 1).any():
+                result = 'NB'
+            elif group['Nota'].isin([2, 3]).any():
+                result = 'EN'
+            elif ((group['Nota'].isin([0, 1])) & (group['Segurança'] > 0)).any():
+                result = 'EB'
+            elif ((group['Nota'].isin([0, 1])) & (group['Segurança'] == 0)).any():
+                result = 'NE'
+            else:
+                result = np.nan
+            return result
+
+        # Apply the function to each 'Agrupamento' and 'Filial' group and assign the result to the 'Ind. Stk' column
+        group_results = data_df.groupby(['Agrupamento', 'Filial']).apply(determine_ind_stk)
+        group_results.name = 'Ind. Stk'  # Set the name of the Series directly
+
+        # Merge the group results back to the data_df
+        data_df = data_df.merge(group_results, on=['Agrupamento', 'Filial'], how='left')
+
+        # Remove the 'Ind. Stk_x' column if it exists and rename 'Ind. Stk_y' to 'Ind. Stk'
+        if 'Ind. Stk_x' in data_df.columns:
+            data_df.drop(columns=['Ind. Stk_x'], inplace=True)
+        if 'Ind. Stk_y' in data_df.columns:
+            data_df.rename(columns={'Ind. Stk_y': 'Ind. Stk'}, inplace=True)
+
+        data_df.to_excel(data_file_path, index=False)  # Save the modified DataFrame
+
+    # Convert 'Filial' in data_df to object to match data_frame
+    data_df['Filial'] = data_df['Filial'].astype(object)
+
+    # Merge with the provided data_frame on 'Agrupamento' and 'Filial'
+    merged_df = pd.merge(data_frame, data_df[['Agrupamento', 'Filial', 'Ind. Stk']], on=['Agrupamento', 'Filial'], how='left')
+
+    return merged_df

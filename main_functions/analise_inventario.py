@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
+import os
 import logging
 from database_functions.funcoes_base import download, save_to_excel
 from database_functions.queries import report_query, report_query_orders
 from main_functions.sugestao_compra import create_final_df
+from main_functions.processamento import classify_stock_items
 
 # Get a logger
 logger = logging.getLogger(__name__)
@@ -101,8 +103,16 @@ def merge_data(original_data, sales_metrics, orders_metrics):
     - DataFrame: Merged data containing original columns and sales metrics.
     """
 
-    merged_data = pd.merge(original_data, sales_metrics, on='Agrupamento', how='left')
-    merged_data = pd.merge(merged_data, orders_metrics, on='Agrupamento', how='left')
+    # Ensure 'Filial' and 'Agrupamento' are strings in all DataFrames to avoid type mismatch
+    columns_to_convert = ['Agrupamento', 'Filial']
+    for df in [original_data, sales_metrics, orders_metrics]:
+        for column in columns_to_convert:
+            if column in df.columns:
+                df[column] = df[column].astype(str).apply(lambda x: x.zfill(4))
+
+    merged_data = pd.merge(original_data, sales_metrics, on=columns_to_convert, how='left')
+    merged_data = pd.merge(merged_data, orders_metrics, on=columns_to_convert, how='left')
+
     return merged_data
 
 
@@ -123,6 +133,9 @@ def create_report(filial, period, func):
     period_mapping = {"3 meses": 3, "6 meses": 6, "12 meses": 12, "24 meses": 24}
     period_int = period_mapping.get(period, 0)
 
+    # Base_df path
+    data_file_path = os.path.join('params', 'Base_df.xlsx')
+
     # Define all available branches
     all_branches = ['0101', '0103', '0104', '0105']
 
@@ -135,57 +148,60 @@ def create_report(filial, period, func):
         # Process sales information
         sales_info_df = get_data(current_filial, period_int, select_func=1)
         sales_info_df = calculate_sales_metrics(sales_info_df, period_int)
+        sales_info_df['Filial'] = current_filial
 
         # Process order information
         order_info_df = get_data(current_filial, period_int, select_func=0)
         order_info_df = calculate_order_metrics(order_info_df)
+        order_info_df['Filial'] = current_filial
 
         # Create and merge final data
-        base_df = create_final_df(current_filial, func=False)
+        base_df = pd.read_excel(data_file_path)
         report_df = merge_data(base_df, sales_info_df, order_info_df)
 
-        columns_to_keep = ['Agrupamento', 'Descrição', 'Código', f'Estoque_{current_filial}',
-                           f'Quantidade pedida_{current_filial}', f'Nota_{current_filial}', f'Segurança_{current_filial}', f'min_{current_filial}',
-                           f'max_{current_filial}', 'sales_period_count', 'demand_period_sum', 'average_demand', 'average_cost']
-
-        report_df = report_df[columns_to_keep]
-
-        # Rename columns
-        column_mapping = {
-            'Estoque': 'Saldo CO',
-            'Quantidade Pedida': 'Qtd. Pedida',
-            'min': 'Min',
-            'max': 'Max',
-            'sales_period_count': 'Vendas no período',
-            'demand_period_sum': 'Demanda no período',
-            'average_demand': 'Demanda média mensal',
-            'average_cost': 'Custo médio'
-        }
-
-        report_df = report_df.rename(columns=column_mapping)
-
-        if filial == 'Todas':
-            non_common_columns = [col for col in report_df.columns if col not in ['Agrupamento', 'Descrição', 'Código']]
-            renamed_columns = {col: f"{col}_{current_filial}" for col in non_common_columns}
-            report_df.rename(columns=renamed_columns, inplace=True)
-
-        # Save individual reports or aggregate
-        if func:
-            save_to_excel(report_df, f"analise_inventario_{period_int}_", current_filial, open_file=False)
+        # Concatenate this report_df to the aggregated_report_df
+        if aggregated_report_df is None:
+            aggregated_report_df = report_df
         else:
-            if aggregated_report_df is None:
-                aggregated_report_df = report_df
-            else:
-                # Merging data frames
-                aggregated_report_df = pd.merge(aggregated_report_df, report_df,
-                                                on=['Agrupamento', 'Descrição', 'Código'], how='outer')
+            aggregated_report_df = pd.concat([aggregated_report_df, report_df], ignore_index=True)
+
+    # coluna filial em primeiro e coluna de ind_estoque antes da nota
+    columns_to_keep = ['Filial', 'Agrupamento', 'Código', 'Descrição', 'Grupo', 'Estoque', 'Quantidade pedida', 'Nota',
+                       'Segurança', 'min', 'max', 'sales_period_count', 'demand_period_sum', 'average_demand',
+                       'average_cost']
+
+    intermediate_df = aggregated_report_df[columns_to_keep].copy()
+
+    intermediate_df.replace(np.nan, 0, inplace=True)
+
+    final_df = classify_stock_items(intermediate_df)
+    # Define the new order and the new names for specific columns
+    column_order = ['Filial', 'Agrupamento', 'Código', 'Descrição', 'Grupo', 'Estoque', 'Quantidade pedida', 'Ind. Stk',
+                    'Nota', 'Segurança', 'min', 'max', 'Vendas no período', 'Demanda no período', 'Demanda media',
+                    'Custo médio']
+
+    # Dictionary for renaming columns
+    rename_dict = {
+        'sales_period_count': 'Vendas no período',
+        'demand_period_sum': 'Demanda no período',
+        'average_demand': 'Demanda media',
+        'average_cost': 'Custo médio'
+    }
+
+    # Rename and reorder the columns
+    final_df_renamed = final_df.rename(columns=rename_dict).copy()
+    final_df_ordered = final_df_renamed[column_order].copy()
+
+    # Remove duplicate rows based on 'Filial' and 'Agrupamento' columns
+    final_df_ordered = final_df_ordered.drop_duplicates(subset=['Filial', 'Agrupamento'])
+
+    # Filter the DataFrame for the specified 'Filial' if not processing all branches
+    if filial != 'Todas':
+        final_df_ordered = final_df_ordered[final_df_ordered['Filial'] == filial]
 
     # After processing all branches, save the aggregated DataFrame
     if not func:
-        if filial == 'Todas':
-            save_to_excel(aggregated_report_df, f"analise_inventario_{period_int}", 'Todas', open_file=False)
-        else:
-            save_to_excel(aggregated_report_df, f"analise_inventario_{period_int}", filial, open_file=True)
+        save_to_excel(final_df_ordered, f"analise_inventario_{period_int}",
+                      'Todas' if filial == 'Todas' else filial, open_file=False)
 
-    return aggregated_report_df
-
+    return final_df_ordered

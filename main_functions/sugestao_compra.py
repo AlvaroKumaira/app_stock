@@ -41,7 +41,7 @@ def general_information(filial):
     logger.info(f"Fetching general information for branch {filial}.")
 
     query = info_gerais
-    params = (filial, filial,)
+    params = (filial,)
     gi_data_frame = download_method(query, params)
 
     # Convert 'B2_QATU' column to numeric data
@@ -49,9 +49,10 @@ def general_information(filial):
     gi_data_frame[column_to_sum] = gi_data_frame[column_to_sum].apply(pd.to_numeric, errors='coerce')
 
     # Aggregate by 'B1_ZGRUPO'
-    gi_data_frame = gi_data_frame.groupby('B1_ZGRUPO', as_index=False).agg({
+    gi_data_frame = gi_data_frame.groupby(['B1_ZGRUPO', 'B2_FILIAL'], as_index=False).agg({
         'B1_DESC': 'first',
         'B1_COD': 'first',
+        'B1_GRUPO': 'first',
         column_to_sum: 'sum'
     })
 
@@ -80,7 +81,7 @@ def orders(filial):
     o_data_frame[column_to_sum] = o_data_frame[column_to_sum].apply(pd.to_numeric, errors='coerce')
 
     # Aggregate by 'B1_ZGRUPO'
-    o_data_frame = o_data_frame.groupby('B1_ZGRUPO', as_index=False).agg({column_to_sum: 'sum'})
+    o_data_frame = o_data_frame.groupby(['B1_ZGRUPO', 'C7_FILIAL'], as_index=False).agg({column_to_sum: 'sum'})
 
     logger.info(f"Processed order information for branch {filial}.")
     return o_data_frame
@@ -108,13 +109,20 @@ def fat_history(filial):
     column_to_sum = "D2_QUANT"
     fh_data_frame[column_to_sum] = fh_data_frame[column_to_sum].apply(pd.to_numeric, errors='coerce')
 
-    # Aggregate data and process further
-    result = fh_data_frame.groupby(['B1_ZGRUPO', 'Month_Year'], as_index=False)[column_to_sum].sum()
-    pivot_result = result.pivot_table(index='B1_ZGRUPO', columns='Month_Year', values=column_to_sum, fill_value=0,
-                                      aggfunc='sum')
+    # Aggregate data
+    result = fh_data_frame.groupby(['B1_ZGRUPO', 'D2_FILIAL', 'Month_Year'], as_index=False)[column_to_sum].sum()
+
+    # Pivot with both 'B1_ZGRUPO' and 'B1_FILIAL' in the index
+    pivot_result = result.pivot_table(index=['B1_ZGRUPO', 'D2_FILIAL'], columns='Month_Year', values=column_to_sum,
+                                      fill_value=0, aggfunc='sum')
+
+    # Calculate additional metrics
     pivot_result['total_sum'] = pivot_result.sum(axis=1)
     pivot_result['avg_last_two_months'] = np.ceil(pivot_result.iloc[:, -3:-1].mean(axis=1)).astype(int)
     pivot_result['avg_last_three_months'] = np.ceil(pivot_result.iloc[:, -5:-2].mean(axis=1)).astype(int)
+
+    # Reset the index to make 'B1_ZGRUPO' and 'B1_FILIAL' columns again
+    pivot_result = pivot_result.reset_index()
 
     fh_data_frame = calculate_grades(pivot_result)
 
@@ -124,9 +132,9 @@ def fat_history(filial):
 
 def join_parts(*data_frames):
     """
-    Join multiple data frames on the 'B1_ZGRUPO' column.
+    Join multiple data frames on 'Agrupamento' and 'Filial' columns.
     NaN values will be filled with 0.
-    
+
     Parameters:
     - *data_frames (DataFrames): One or more data frames to be joined.
 
@@ -136,9 +144,27 @@ def join_parts(*data_frames):
     if not data_frames:
         raise ValueError("At least one dataframe must be provided.")
 
-    joined_df = data_frames[0]
+        # Standardize the 'Filial' column name in the first data frame
+    filial_column = next((col for col in ['B2_FILIAL', 'D2_FILIAL', 'C7_FILIAL'] if col in data_frames[0].columns), None)
+    if filial_column is None:
+        raise ValueError("First data frame is missing 'Filial' column")
+    joined_df = data_frames[0].rename(columns={filial_column: 'Filial'})
+
     for df in data_frames[1:]:
-        joined_df = pd.merge(joined_df, df, on='B1_ZGRUPO', how='left')
+        # Identify the 'Filial' column in the current data frame
+        filial_column = next((col for col in ['B2_FILIAL', 'D2_FILIAL', 'C7_FILIAL'] if col in df.columns), None)
+        if filial_column is None:
+            raise ValueError("Data frame is missing 'Filial' column")
+
+        # Rename the 'Filial' column to a standard name for consistency
+        df = df.rename(columns={filial_column: 'Filial'})
+
+        # Check for 'B1_ZGRUPO' column and merge
+        if 'B1_ZGRUPO' in df.columns:
+            joined_df = pd.merge(joined_df, df, on=['B1_ZGRUPO', 'Filial'], how='left')
+        else:
+            raise ValueError("Data frame is missing 'B1_ZGRUPO' column")
+
     joined_df.fillna(0, inplace=True)
     return joined_df
 
@@ -158,40 +184,38 @@ def create_final_df(filial, func):
     # Define a list of all branches
     all_filials = ['0101', '0103', '0104', "0105"]
 
-    # Check if 'Todas' option is selected
     if filial == 'Todas':
         filials_to_process = all_filials
     else:
         filials_to_process = [filial]
 
-    # Initialize an empty DataFrame to hold the aggregated results
     aggregated_df = pd.DataFrame()
 
     for current_filial in filials_to_process:
         logger.info(f"Creating final data frame for branch {current_filial}.")
 
-        # Retrieve necessary data
         general_info = general_information(current_filial)
         order_info = orders(current_filial)
         fat_info = fat_history(current_filial)
 
         # Join the tables
         joined_table = join_parts(general_info, order_info, fat_info)
-
-        # Fetch params from params and prepare for merging
         params_df = merge_sheets(filial=current_filial)
+
+        # Ensure 'B1_ZGRUPO' is a string for merging purposes
         joined_table['B1_ZGRUPO'] = joined_table['B1_ZGRUPO'].astype(str)
         params_df['B1_ZGRUPO'] = params_df['B1_ZGRUPO'].astype(str)
 
-        # Merge the tables and calculate necessary columns
+        # Merge the tables including the 'Filial' column in the merge to ensure differentiation
         intermediate_df = pd.merge(joined_table, params_df, on='B1_ZGRUPO', how='left')
 
         intermediate_df = calculate_min_max_columns(intermediate_df)
         final_df = calculate_stock_suggestion(intermediate_df)
 
-        # Rename and map columns as needed
         column_mapping_excel = {
             'B1_ZGRUPO': 'Agrupamento',
+            'Filial': 'Filial',
+            'B1_GRUPO': 'Grupo',
             'B1_DESC': 'Descrição',
             'B1_COD': 'Código',
             'B2_QATU': 'Estoque',
@@ -202,48 +226,25 @@ def create_final_df(filial, func):
             'grade': 'Nota',
             'stock_suggestion': 'Sugestão de Compra'
         }
+        # Rename and map columns as needed
         final_df = final_df.rename(columns=column_mapping_excel)
 
-        # Rename non-common columns to include the branch identifier
-        non_common_columns = [col for col in final_df.columns if col not in ['Agrupamento', 'Descrição', 'Código']]
-        renamed_columns = {col: f"{col}_{current_filial}" for col in non_common_columns}
-        final_df.rename(columns=renamed_columns, inplace=True)
-
-        # Merge the current final_df into the aggregated_df
+        # Concatenate the current final_df into the aggregated_df
         if aggregated_df.empty:
             aggregated_df = final_df
         else:
-            aggregated_df = pd.merge(aggregated_df, final_df, on=['Agrupamento', 'Descrição', 'Código'], how='outer')
+            aggregated_df = pd.concat([aggregated_df, final_df], ignore_index=True)
 
-    # Process the aggregated data frame
-    if filial == 'Todas':
-        # Create a copy of the sliced DataFrame to avoid SettingWithCopyWarning
-        df = aggregated_df[['Agrupamento', 'Descrição', 'Código', 'Nota_0101', 'Nota_0103', 'Nota_0104', 'Nota_0105',
-                            'Segurança_0101', 'Segurança_0103', 'Segurança_0104', 'Segurança_0105', 'min_0101',
-                            'min_0103', 'min_0104', 'min_0105', 'max_0101', 'max_0103', 'max_0104', 'max_0105']].copy()
+    # Ensure the 'Filial' column is formatted correctly
+    if 'Filial' in aggregated_df.columns:
+        aggregated_df['Filial'] = aggregated_df['Filial'].astype(str).apply(lambda x: x.zfill(4))
 
-        # Now fill NaN values with appropriate defaults
-        df.fillna({'Nota_0101': 0, 'Nota_0103': 0, 'Nota_0104': 0, 'Nota_0105': 0,
-                   'Segurança_0101': 0, 'Segurança_0103': 0, 'Segurança_0104': 0, 'Segurança_0105': 0,
-                   'min_0101': 0, 'min_0103': 0, 'min_0104': 0, 'min_0105': 0, 'max_0101': 0, 'max_0103': 0,
-                   'max_0104': 0, 'max_0105': 0}, inplace=True)
-
-        if func:
-            # Save the aggregated result
-            save_to_excel(df, "sugestão_compra_", 'Todas', open_file=True)
-            logger.info("Final data frame for all branches saved to Excel.")
-
-            # Return the processed aggregated DataFrame
-            return df
-        else:
-            return df
+    print(aggregated_df.head())
 
     if func:
-        # Save the final result
-        save_to_excel(final_df, "sugestão_compra_", filial, open_file=True)
-        logger.info(f"Final data frame for branch {filial} saved to Excel.")
+        file_name = "sugestão_compra_" + ('Todas' if filial == 'Todas' else filial)
+        save_to_excel(aggregated_df, file_name, '', open_file=True)
+        logger.info(
+            f"Final data frame for {'all branches' if filial == 'Todas' else 'branch ' + filial} saved to Excel.")
 
-        return final_df
-
-    else:
-        return final_df
+    return aggregated_df

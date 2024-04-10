@@ -1,7 +1,7 @@
 import logging
 import os
 import pandas as pd
-from database_functions.funcoes_base import download
+from database_functions.funcoes_base import download, save_to_excel
 from database_functions.queries import query_busca, query_resultado, query_resultado_cod_item
 
 
@@ -45,28 +45,28 @@ def search_function(user_search):
     if not data_frame.empty:
         try:
             # Define the path to the Excel file within the 'params' folder at the project's root
-            base_file_path = os.path.join('params', 'Base_df.xlsx')
             inv_file_path = os.path.join('params', 'inv_df.xlsx')
 
-            # Read the local Excel file from the specified folder
-            base_df = pd.read_excel(base_file_path)
             inv_df = pd.read_excel(inv_file_path)
 
             # Convert the group ID columns to string to ensure matching types
-            data_frame['B1_ZGRUPO'] = data_frame['B1_ZGRUPO'].astype(str)
-            base_df['Agrupamento'] = base_df['Agrupamento'].astype(str)
+            data_frame['Agrupamento'] = data_frame['Agrupamento'].astype(str)
             inv_df['Agrupamento'] = inv_df['Agrupamento'].astype(str)
+            inv_df['Filial'] = inv_df['Filial'].astype(str).str.zfill(4)
+            data_frame['Filial'] = data_frame['Filial'].astype(str).str.zfill(4)
 
-            # Merge with the data_frame based on the group ID (B1_ZGRUPO to Agrupamento)
-            merged_df = data_frame.merge(base_df, left_on='B1_ZGRUPO', right_on='Agrupamento', how='left')
+            columns_to_drop = ['Descrição', 'Grupo', 'Estoque']
+            inv_df = inv_df.drop(columns=columns_to_drop)
 
-            final_df = merged_df.merge(inv_df, left_on='B1_ZGRUPO', right_on='Agrupamento', how='left')
+            merged_df = data_frame.merge(inv_df[['Agrupamento', 'Filial', 'Ind. Stk', 'min', 'max', 'Segurança', 'Nota',
+                                                 'Vendas no período', 'Demanda no período']],
+                                         on=['Agrupamento', 'Filial'], how='left')
 
-            final_df.fillna(0, inplace=True)
+            merged_df.fillna(0, inplace=True)
 
             # Log the completion of the process and return the merged DataFrame
-            logger.info(f"Search complete with {len(final_df)} results, additional data merged from local Excel file.")
-            return final_df
+            logger.info(f"Search complete with {len(merged_df)} results, additional data merged from local Excel file.")
+            return merged_df
 
         except Exception as e:
             logger.error(f"An error occurred during the merging process: {e}")

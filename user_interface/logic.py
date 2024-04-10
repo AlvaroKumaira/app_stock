@@ -93,49 +93,81 @@ class BuscaLogic(BaseLogic):
 
         # Connect both update_labels to the finished_with_result signal
         self.download_thread.finished_with_result.connect(self.update_labels)
-        self.download_thread.finished_with_result.connect(self.display_dataframe)
 
         self.download_thread.start()
 
     def update_labels(self, df):
+        def get_value_by_filial(df, column_name, filial_code, is_int=True):
+
+            filtered_df = df[df['Filial'] == filial_code]
+
+            if not filtered_df.empty:
+                # Get the first item in the specified column
+                value = filtered_df[column_name].iloc[0]
+
+                if is_int:
+                    try:
+                        # Attempt to convert the value to an integer only if is_int is True
+                        value = int(value)
+                    except ValueError:
+                        print(f"Conversion to int failed, keeping original value: {value}")
+                return value
+            else:
+                return 0 if is_int else 'NE'
+
         if df is None or df.empty:
             self.clear_labels()
             self.ui.agrup_label.setText(f"Agrupamento: Não encontrado!")
             self.ui.desc_label.setText(f"Descrição: Não encontrado!")
+            self.display_dataframe(df)
             return
         try:
             self.clear_labels()
             # Get all values from the table
-            group_value = df.iloc[0]['B1_ZGRUPO']
-            item_group_value = df.iloc[0]['B1_GRUPO']
-            group_desc = df.iloc[0]['BM_DESC']
-            desc_value = df.iloc[0]['B1_DESC']
-            min_value_m = df.iloc[0]['min_0101']
-            min_value_ca = df.iloc[0]['min_0104']
-            min_value_po = df.iloc[0]['min_0103']
-            min_value_pa = df.iloc[0]['min_0105']
-            max_value_m = df.iloc[0]['max_0101']
-            max_value_ca = df.iloc[0]['max_0104']
-            max_value_po = df.iloc[0]['max_0103']
-            max_value_pa = df.iloc[0]['max_0105']
-            seg_value_m = df.iloc[0]['Segurança_0101']
-            seg_value_ca = df.iloc[0]['Segurança_0104']
-            seg_value_po = df.iloc[0]['Segurança_0103']
-            seg_value_pa = df.iloc[0]['Segurança_0105']
-            nota_value_m = df.iloc[0]['Nota_0101']
-            nota_value_ca = df.iloc[0]['Nota_0104']
-            nota_value_po = df.iloc[0]['Nota_0103']
-            nota_value_pa = df.iloc[0]['Nota_0105']
-            call_value_m = df.iloc[0]['Vendas no período_0101']
-            call_value_ca = df.iloc[0]['Vendas no período_0104']
-            call_value_po = df.iloc[0]['Vendas no período_0103']
-            call_value_pa = df.iloc[0]['Vendas no período_0105']
-            dem_value_m = df.iloc[0]['Demanda no período_0101']
-            dem_value_ca = df.iloc[0]['Demanda no período_0104']
-            dem_value_po = df.iloc[0]['Demanda no período_0103']
-            dem_value_pa = df.iloc[0]['Demanda no período_0105']
+            group_value = df.iloc[0]['Agrupamento']
+            item_group_value = df.iloc[0]['Grupo']
+            group_desc = df.iloc[0]['DescricaoGrupo']
+            desc_value = df.iloc[0]['Descrição']
+            min_value_m = get_value_by_filial(df, 'min', '0101')
+            min_value_ca = get_value_by_filial(df, 'min', '0104')
+            min_value_po = get_value_by_filial(df, 'min', '0103')
+            min_value_pa = get_value_by_filial(df, 'min', '0105')
+
+            max_value_m = get_value_by_filial(df, 'max', '0101')
+            max_value_ca = get_value_by_filial(df, 'max', '0104')
+            max_value_po = get_value_by_filial(df, 'max', '0103')
+            max_value_pa = get_value_by_filial(df, 'max', '0105')
+
+            seg_value_m = get_value_by_filial(df, 'Segurança', '0101')
+            seg_value_ca = get_value_by_filial(df, 'Segurança', '0104')
+            seg_value_po = get_value_by_filial(df, 'Segurança', '0103')
+            seg_value_pa = get_value_by_filial(df, 'Segurança', '0105')
+
+            nota_value_m = get_value_by_filial(df, 'Nota', '0101')
+            nota_value_ca = get_value_by_filial(df, 'Nota', '0104')
+            nota_value_po = get_value_by_filial(df, 'Nota', '0103')
+            nota_value_pa = get_value_by_filial(df, 'Nota', '0105')
+
+            call_value_m = get_value_by_filial(df, 'Vendas no período', '0101')
+            call_value_ca = get_value_by_filial(df, 'Vendas no período', '0104')
+            call_value_po = get_value_by_filial(df, 'Vendas no período', '0103')
+            call_value_pa = get_value_by_filial(df, 'Vendas no período', '0105')
+
+            dem_value_m = get_value_by_filial(df, 'Demanda no período', '0101')
+            dem_value_ca = get_value_by_filial(df, 'Demanda no período', '0104')
+            dem_value_po = get_value_by_filial(df, 'Demanda no período', '0103')
+            dem_value_pa = get_value_by_filial(df, 'Demanda no período', '0105')
+
+            ind_value_m = get_value_by_filial(df, 'Ind. Stk', '0101', False)
+            ind_value_ca = get_value_by_filial(df, 'Ind. Stk', '0104', False)
+            ind_value_po = get_value_by_filial(df, 'Ind. Stk', '0103', False)
+            ind_value_pa = get_value_by_filial(df, 'Ind. Stk', '0105', False)
 
             # Set all labels
+            self.ui.ind_stk_m.setText(f"Indicador de Estoque: {ind_value_m}")
+            self.ui.ind_stk_c.setText(f"Indicador de Estoque: {ind_value_ca}")
+            self.ui.ind_stk_p.setText(f"Indicador de Estoque: {ind_value_po}")
+            self.ui.ind_stk_pa.setText(f"Indicador de Estoque: {ind_value_pa}")
             self.ui.agrup_label.setText(f"Agrupamento: {group_value}")
             self.ui.group_label.setText(f"Grupo: {item_group_value} - {group_desc}")
             self.ui.desc_label.setText(f"Descrição: {desc_value}")
@@ -163,14 +195,14 @@ class BuscaLogic(BaseLogic):
             self.ui.dem_c.setText(f"Dem: {dem_value_ca}")
             self.ui.dem_p.setText(f"Dem: {dem_value_po}")
             self.ui.dem_pa.setText(f"Dem: {dem_value_pa}")
+
         except Exception as e:
             self.clear_labels()
             logger.info(f"using code instead of group code. {e} ")
-            group_value = df.iloc[0]['B1_ZGRUPO']
-            item_group_value = df.iloc[0]['B1_GRUPO']
-            group_desc = df.iloc[0]['BM_DESC']
-            desc_value = df.iloc[0]['B1_DESC']
-            self.ui.agrup_label.setText(f"Agrupamento: {group_value}")
+            item_group_value = df.iloc[0]['Grupo']
+            group_desc = df.iloc[0]['DescricaoGrupo']
+            desc_value = df.iloc[0]['Descrição']
+            self.ui.agrup_label.setText(f"Agrupamento: ")
             self.ui.group_label.setText(f"Grupo: {item_group_value} - {group_desc}")
             self.ui.desc_label.setText(f"Descrição: {desc_value}")
             self.ui.min.setText(f"Min:")
@@ -180,6 +212,8 @@ class BuscaLogic(BaseLogic):
             self.ui.seguranca_p.setText(f"Segurança:")
             self.ui.seguranca_pa.setText(f"Segurança:")
             self.ui.nota.setText(f"Nota:")
+
+        self.display_dataframe(df)
 
     def display_dataframe(self, df):
         """
@@ -191,14 +225,17 @@ class BuscaLogic(BaseLogic):
             return
 
             # Rename columns
-        column_names = {"B1_COD": "Código", "B2_QATU": "Quantidade", "B2_FILIAL": "Filial"}
-        df.rename(columns=column_names, inplace=True)
+        columns_to_keep = ["Código", "Quantidade", "Filial"]
+        df_filter = df[columns_to_keep].copy()
 
-        # Group by 'Código' and aggregate 'Quantidade' for each 'Filial'
-        grouped_df = df.pivot_table(index='Código', columns='Filial', values='Quantidade', aggfunc='sum', fill_value=0)
+        # Aggregate the quantities for each 'Código' within each 'Filial'
+        grouped_df = df_filter.groupby(['Código', 'Filial'], as_index=False)['Quantidade'].sum()
+
+        # Pivot the table to get the quantity for each 'Código' per 'Filial'
+        pivot_df = grouped_df.pivot(index='Código', columns='Filial', values='Quantidade').fillna(0)
 
         # Set the row count
-        self.ui.search_result.setRowCount(grouped_df.shape[0])
+        self.ui.search_result.setRowCount(pivot_df.shape[0])
 
         # Define the column index for branches
         matriz_col_index = 1
@@ -207,7 +244,7 @@ class BuscaLogic(BaseLogic):
         paraua_col_index = 4
 
         # Populate the QTableWidget
-        for row_index, (codigo, row_data) in enumerate(grouped_df.iterrows()):
+        for row_index, (codigo, row_data) in enumerate(pivot_df.iterrows()):
             # Set code value
             self.ui.search_result.setItem(row_index, 0, QTableWidgetItem(str(codigo)))
 
@@ -219,6 +256,10 @@ class BuscaLogic(BaseLogic):
             self.ui.search_result.setItem(row_index, paraua_col_index, QTableWidgetItem(str(row_data.get('0105', 0))))
 
     def clear_labels(self):
+        self.ui.ind_stk_m.setText(f"Indicador de Estoque: ")
+        self.ui.ind_stk_c.setText(f"Indicador de Estoque: ")
+        self.ui.ind_stk_p.setText(f"Indicador de Estoque: ")
+        self.ui.ind_stk_pa.setText(f"Indicador de Estoque: ")
         self.ui.agrup_label.setText(f"Agrupamento: ")
         self.ui.group_label.setText(f"Grupo: ")
         self.ui.desc_label.setText(f"Descrição: ")
@@ -260,7 +301,7 @@ class Analysis_Report_Logic(BaseLogic):
         filial = self.ui.table_filial_select.currentText()
         periodo = self.ui.table_periodo_select.currentText()
 
-        self.download_thread = DownloadThread(create_report, filial, periodo, True)
+        self.download_thread = DownloadThread(create_report, filial, periodo, False)
         self.download_thread.progress_started.connect(self.start_progress)
         self.download_thread.progress_stopped.connect(self.stop_progress)
         self.download_thread.finished.connect(self.on_thread_finished)

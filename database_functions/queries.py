@@ -1,7 +1,7 @@
 saldo_analitico = """
         SELECT DISTINCT
 P.B1_ZGRUPO,
-B1_COD,
+P.B1_COD,
 P.B1_TIPO,
 P.B1_GRUPO,
 P.B1_DESC,
@@ -9,26 +9,22 @@ D.BZ_LOCALI2,
 P.B1_UM,
 S.B2_FILIAL,
 S.B2_LOCAL,
-S.B2_QATU AS B2_QATU_COPY,
 S.B2_QATU,
 S.B2_CM1,
 S.B2_VATU1
 FROM
     SB1010 AS P
 LEFT JOIN
-    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.B2_LOCAL = 'A01' AND S.D_E_L_E_T_ <> '*'
+    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.D_E_L_E_T_ <> '*'
 LEFT JOIN   
     SBZ010 AS D ON TRIM(P.B1_COD) = TRIM(D.BZ_COD) AND D.BZ_FILIAL = ? AND D.D_E_L_E_T_ <> '*'
 WHERE
-P.B1_COD = TRIM(P.B1_COD) AND
 P.D_E_L_E_T_ <> '*' AND
-P.B1_GRUPO NOT IN ('002', '001', '003') AND
-P.B1_TIPO IN ('ME', 'MI', 'KT', 'PA') AND
-S.B2_FILIAL IS NOT NULL AND
-S.B2_LOCAL IS NOT NULL
+P.B1_GRUPO NOT IN ('002', '001', '003')
         """
 pedidos = """
         SELECT
+SC7.C7_FILIAL,
 SB.B1_ZGRUPO,
 SC7.C7_NUM,
 SC7.C7_FORNECE,
@@ -86,32 +82,33 @@ INNER JOIN
 SF4010 AS SF ON SD2.D2_TES = SF.F4_CODIGO AND SF.D_E_L_E_T_ <> '*'
 WHERE SD2.D_E_L_E_T_  <> '*'
 AND SB.B1_GRUPO NOT IN ('002', '001', '003')
-AND SB.B1_TIPO IN ('ME', 'MI', 'KT', 'PA')
+AND SD2.D2_TES IN ('502','504','525','650','650','533','534','535','536','537','538','539','540','541','542','543','544','564','609','610','612','613','615',
+'617','618','620','621','625','626','627','629','632','635','636','640','648','650','660','662','664','665','668','669','672','673','678','759','765','766','767','768',
+'769','777','778','872','785','795','796','816','891','588','589','611','614','616','631','634','661','661','663','667','686','804',
+'503','523','524','529','530','531','532','642','657','866','867','868','869','692','799','807','819','876','877','882','883','903', '688', '817','574', '622', '623')
 AND SD2.D2_EMISSAO >= ?
 AND SD2.D2_FILIAL = ?
         """
 info_gerais = """
         SELECT
             P.B1_ZGRUPO,
+            S.B2_FILIAL,
+            P.B1_GRUPO,
             P.B1_COD,
             P.B1_DESC,
             S.B2_QATU
             FROM
                 SB1010 AS P
             LEFT JOIN
-                SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.B2_LOCAL = 'A01' AND S.D_E_L_E_T_ <> '*'
-            LEFT JOIN   
-                SBZ010 AS D ON TRIM(P.B1_COD) = TRIM(D.BZ_COD) AND D.BZ_FILIAL = ? AND D.D_E_L_E_T_ <> '*'
+                SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.D_E_L_E_T_ <> '*'
             WHERE
-                P.D_E_L_E_T_ <> '*' AND
-                P.B1_GRUPO = '320' AND
-                P.B1_TIPO IN ('ME', 'MI', 'KT', 'PA') AND
-                S.B2_FILIAL IS NOT NULL AND
-                S.B2_LOCAL IS NOT NULL
+                P.D_E_L_E_T_ <> '*'
+                AND S.B2_QATU IS NOT NULL
         """
 historico_faturamento = """
         SELECT
                 SB.B1_ZGRUPO,
+                SD2.D2_FILIAL,
                 SD2.D2_COD,
                 SB.B1_DESC,
                 SD2.D2_QUANT,
@@ -121,24 +118,24 @@ historico_faturamento = """
                 INNER JOIN SB1010 AS SB ON SD2.D2_COD = SB.B1_COD AND SB.D_E_L_E_T_ <> '*' 
                 WHERE
                 SD2.D_E_L_E_T_ <> '*'
-                AND SD2.D2_LOCAL = 'A01'
                 AND SD2.D2_FILIAL = ?
                 AND SD2.D2_EMISSAO >= CONVERT(VARCHAR, DATEADD(MONTH, -4, GETDATE()), 112)
                 ORDER BY
                 SD2.D2_EMISSAO
-
         """
 quantidade_receber = """
         SELECT
-            SB.B1_ZGRUPO,
-            ISNULL(SC7.C7_QUANT, 0) - ISNULL(SC7.C7_QUJE, 0) AS QRE
-            FROM SC7010 AS SC7
-            INNER JOIN SB1010 AS SB ON SC7.C7_PRODUTO = SB.B1_COD
-            WHERE SC7.D_E_L_E_T_ <> '*'
-            AND CONVERT(DATETIME, STUFF(STUFF(CAST(SC7.C7_EMISSAO AS VARCHAR), 7, 0, '-'), 5, 0, '-')) BETWEEN DATEADD(DAY, -59, GETDATE()) AND GETDATE()
-            AND ISNULL(SC7.C7_QUANT, 0) - ISNULL(SC7.C7_QUJE, 0) > 0
-            AND SC7.C7_FILIAL = ?
-            AND SB.D_E_L_E_T_ <> '*'
+SC7.C7_FILIAL,
+SB.B1_ZGRUPO,
+SB.B1_FILIAL,
+ISNULL(SC7.C7_QUANT, 0) - ISNULL(SC7.C7_QUJE, 0) AS QRE
+FROM SC7010 AS SC7
+INNER JOIN SB1010 AS SB ON SC7.C7_PRODUTO = SB.B1_COD
+WHERE SC7.D_E_L_E_T_ <> '*'
+AND CONVERT(DATETIME, STUFF(STUFF(CAST(SC7.C7_EMISSAO AS VARCHAR), 7, 0, '-'), 5, 0, '-')) BETWEEN DATEADD(DAY, -59, GETDATE()) AND GETDATE()
+AND ISNULL(SC7.C7_QUANT, 0) - ISNULL(SC7.C7_QUJE, 0) > 0
+AND SC7.C7_FILIAL = ?
+AND SB.D_E_L_E_T_ <> '*'
         """
 query_busca = """SELECT
 P.B1_ZGRUPO,
@@ -150,35 +147,37 @@ P.D_E_L_E_T_ <> '*' AND
 P.B1_COD = ?
 """
 query_resultado = """SELECT
-P.B1_ZGRUPO,
-P.B1_COD,
-P.B1_DESC,
-S.B2_QATU,
-S.B2_FILIAL,
-P.B1_GRUPO,
-SM.BM_DESC
+    S.B2_FILIAL AS Filial,
+    P.B1_ZGRUPO AS Agrupamento,
+    P.B1_COD AS Código,
+    P.B1_DESC AS Descrição,
+    SUM(S.B2_QATU) AS Quantidade,
+    P.B1_GRUPO AS Grupo,
+    SM.BM_DESC AS DescricaoGrupo
 FROM
     SB1010 AS P
 LEFT JOIN
-    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_LOCAL = 'A01' OR S.B2_LOCAL = NULL AND S.D_E_L_E_T_ <> '*'
+    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.D_E_L_E_T_ <> '*'
 LEFT JOIN
     SBM010 AS SM ON TRIM(P.B1_GRUPO) = TRIM(SM.BM_GRUPO) AND SM.D_E_L_E_T_ <> '*'
 WHERE
-P.D_E_L_E_T_ <> '*' AND
-P.B1_ZGRUPO = ?
+    P.D_E_L_E_T_ <> '*'
+    AND P.B1_ZGRUPO = ?
+GROUP BY
+    S.B2_FILIAL, P.B1_ZGRUPO, P.B1_COD, P.B1_DESC, P.B1_GRUPO, SM.BM_DESC
 """
 query_resultado_cod_item = """SELECT
-P.B1_ZGRUPO,
-P.B1_COD,
-P.B1_DESC,
-S.B2_QATU,
-S.B2_FILIAL,
-P.B1_GRUPO,
-SM.BM_DESC
+P.B1_ZGRUPO AS Agrupamento,
+P.B1_COD AS Código,
+P.B1_DESC AS Descrição,
+S.B2_QATU AS Quantidade,
+S.B2_FILIAL AS Filial,
+P.B1_GRUPO AS Grupo,
+SM.BM_DESC AS DescricaoGrupo
 FROM
     SB1010 AS P
 LEFT JOIN
-    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_LOCAL = 'A01' OR S.B2_LOCAL = NULL AND S.D_E_L_E_T_ <> '*'
+    SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) OR S.B2_LOCAL = NULL AND S.D_E_L_E_T_ <> '*'
 LEFT JOIN
     SBM010 AS SM ON TRIM(P.B1_GRUPO) = TRIM(SM.BM_GRUPO) AND SM.D_E_L_E_T_ <> '*'
 WHERE
@@ -186,9 +185,10 @@ P.D_E_L_E_T_ <> '*' AND
 P.B1_COD = ?
 """
 
+
 def report_query(days, filial):
     return f"""
-         SELECT
+        SELECT
 SB.B1_ZGRUPO,
 SD2.D2_COD,
 SB.B1_DESC,
@@ -201,6 +201,10 @@ SB1010 AS SB ON SD2.D2_COD = SB.B1_COD AND SB.D_E_L_E_T_ <> '*'
 WHERE SD2.D_E_L_E_T_  <> '*'
 AND SD2.D2_FILIAL = {filial}
 AND CONVERT(DATETIME, STUFF(STUFF(CAST(SD2.D2_EMISSAO AS VARCHAR), 7, 0, '-'), 5, 0, '-')) >= DATEADD(DAY, - {days}, GETDATE())
+AND SD2.D2_TES IN ('502','504','525','650','650','533','534','535','536','537','538','539','540','541','542','543','544','564','609','610','612','613','615',
+'617','618','620','621','625','626','627','629','632','635','636','640','648','650','660','662','664','665','668','669','672','673','678','759','765','766','767','768',
+'769','777','778','872','785','795','796','816','891','588','589','611','614','616','631','634','661','661','663','667','686','804',
+'503','523','524','529','530','531','532','642','657','866','867','868','869','692','799','807','819','876','877','882','883','903', '688', '817','574', '622', '623')
 ORDER BY SD2.D2_EMISSAO
         """
 
@@ -214,8 +218,6 @@ FROM SC7010 AS SC7
 INNER JOIN
     SB1010 AS SB ON TRIM(SC7.C7_PRODUTO) = TRIM(SB.B1_COD) AND SB.D_E_L_E_T_ <> '*'
 WHERE SC7.D_E_L_E_T_ <> '*' 
-AND SB.B1_GRUPO NOT IN ('002', '001', '003')
-AND SB.B1_TIPO IN ('ME', 'MI', 'KT', 'PA')
 AND SC7.C7_FILIAL = {filial}
 AND CONVERT(DATETIME, STUFF(STUFF(CAST(SC7.C7_EMISSAO AS VARCHAR), 7, 0, '-'), 5, 0, '-')) >= DATEADD(DAY, - {days}, GETDATE())
         """

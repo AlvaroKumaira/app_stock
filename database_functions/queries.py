@@ -21,6 +21,7 @@ LEFT JOIN
 WHERE
 P.D_E_L_E_T_ <> '*' AND
 P.B1_GRUPO NOT IN ('002', '001', '003')
+AND S.B2_LOCAL = 'A01'
         """
 pedidos = """
         SELECT
@@ -82,28 +83,26 @@ INNER JOIN
 SF4010 AS SF ON SD2.D2_TES = SF.F4_CODIGO AND SF.D_E_L_E_T_ <> '*'
 WHERE SD2.D_E_L_E_T_  <> '*'
 AND SB.B1_GRUPO NOT IN ('002', '001', '003')
-AND SD2.D2_TES IN ('502','504','525','650','650','533','534','535','536','537','538','539','540','541','542','543','544','564','609','610','612','613','615',
-'617','618','620','621','625','626','627','629','632','635','636','640','648','650','660','662','664','665','668','669','672','673','678','759','765','766','767','768',
-'769','777','778','872','785','795','796','816','891','588','589','611','614','616','631','634','661','661','663','667','686','804',
-'503','523','524','529','530','531','532','642','657','866','867','868','869','692','799','807','819','876','877','882','883','903', '688', '817','574', '622', '623')
 AND SD2.D2_EMISSAO >= ?
 AND SD2.D2_FILIAL = ?
         """
 info_gerais = """
         SELECT
-            P.B1_ZGRUPO,
-            S.B2_FILIAL,
-            P.B1_GRUPO,
-            P.B1_COD,
-            P.B1_DESC,
-            S.B2_QATU
-            FROM
-                SB1010 AS P
-            LEFT JOIN
-                SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.D_E_L_E_T_ <> '*'
-            WHERE
-                P.D_E_L_E_T_ <> '*'
-                AND S.B2_QATU IS NOT NULL
+    P.B1_ZGRUPO,
+    S.B2_FILIAL,
+    P.B1_GRUPO,
+    P.B1_COD,
+    P.B1_DESC,
+    S.B2_QATU,
+	S.B2_LOCAL
+    FROM
+        SB1010 AS P
+    LEFT JOIN
+        SB2010 AS S ON TRIM(P.B1_COD) = TRIM(S.B2_COD) AND S.B2_FILIAL = ? AND S.D_E_L_E_T_ <> '*'
+    WHERE
+        P.D_E_L_E_T_ <> '*'
+        AND S.B2_QATU IS NOT NULL
+		AND S.B2_LOCAL = 'A01'
         """
 historico_faturamento = """
         SELECT
@@ -163,6 +162,7 @@ LEFT JOIN
 WHERE
     P.D_E_L_E_T_ <> '*'
     AND P.B1_ZGRUPO = ?
+    AND S.B2_LOCAL = 'A01'
 GROUP BY
     S.B2_FILIAL, P.B1_ZGRUPO, P.B1_COD, P.B1_DESC, P.B1_GRUPO, SM.BM_DESC
 """
@@ -183,6 +183,7 @@ LEFT JOIN
 WHERE
 P.D_E_L_E_T_ <> '*' AND
 P.B1_COD = ?
+AND S.B2_LOCAL = 'A01'
 """
 
 

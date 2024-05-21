@@ -1,14 +1,13 @@
 import logging
 import os
 from datetime import datetime
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QWidget, QFileDialog
-from PyQt5.QtCore import QPropertyAnimation, Qt, QPoint
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtCore import Qt, QPoint
 from .design import Ui_MainWindow
 from .logic import Download_Tables_Logic, SugestaoLogic, BuscaLogic, Analysis_Report_Logic, Table_Search_Logic
 from .download_thread import DownloadThread
 from database_functions.params_update import save_excel_locally
 from main_functions.sugestao_compra import create_final_df
-from main_functions.analise_inventario import create_report
 
 logger = logging.getLogger(__name__)
 
@@ -114,15 +113,6 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
             self.create_df_thread.finished_with_result.connect(self.on_create_df_finished)
             self.create_df_thread.progress_started.connect(self.on_progress_started)
             self.create_df_thread.start()
-
-            # Start the thred for updating the inventory file
-            self.update_inv_thread = DownloadThread(
-                create_report,
-                'Todas', '12 meses', False
-            )
-            self.update_inv_thread.finished_with_result.connect(self.on_update_inv_finished)
-            self.update_inv_thread.progress_started.connect(self.on_progress_started)
-            self.update_inv_thread.progress_stopped.connect(self.on_progress_stopped)
         else:
             self.startup_bar.hide()
             logger.error("Application update has already been processed today")
@@ -132,9 +122,6 @@ class MainWindowLogic(QMainWindow, Ui_MainWindow):
         save_excel_locally("Base_df.xlsx", data=result)
 
         self.update_inv_thread.start()
-
-    def on_update_inv_finished(self, result):
-        save_excel_locally("inv_df.xlsx", data=result)
 
     def on_progress_started(self):
         # Show a loading indicator

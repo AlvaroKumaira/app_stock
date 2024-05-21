@@ -1,5 +1,4 @@
 import logging
-import os
 from user_interface.main_ui import MainWindowLogic
 from PyQt5.QtWidgets import QApplication
 

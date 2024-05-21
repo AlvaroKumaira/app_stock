@@ -4,7 +4,6 @@ import os
 import logging
 from database_functions.funcoes_base import download, save_to_excel
 from database_functions.queries import report_query, report_query_orders
-from main_functions.sugestao_compra import create_final_df
 from main_functions.processamento import classify_stock_items
 
 # Get a logger
